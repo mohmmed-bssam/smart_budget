@@ -13,4 +13,12 @@ class Category extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+    public function budgets()
+    {
+        return $this->hasMany(Budget::class);
+    }
 }
