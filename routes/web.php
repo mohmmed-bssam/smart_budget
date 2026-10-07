@@ -30,6 +30,7 @@ Route::prefix(LaravelLocalization::setLocale())
         })->name('home');
 
 
+
         /*
         |--------------------------------------------------------------------------
         | Authentication Routes
@@ -44,9 +45,12 @@ Route::prefix(LaravelLocalization::setLocale())
         | User Dashboard
         |--------------------------------------------------------------------------
         */
-        Route::prefix('admin')
-            ->name('user.')
+        Route::middleware(['auth', 'verified'])
             ->group(function () {
+
+                Route::get('/dashboard', function () {
+                    return view('dashboard');
+                })->name('dashboard');
 
                 Route::resource('accounts', AccountController::class);
                 Route::resource('categories', CategoryController::class);
@@ -54,21 +58,20 @@ Route::prefix(LaravelLocalization::setLocale())
                 Route::resource('budgets', BudgetController::class);
                 Route::resource('goals', GoalController::class);
                 Route::resource('savings', SavingController::class);
-            });
-        /*
+                /*
                 |--------------------------------------------------------------------------
                 | Profile
                 |--------------------------------------------------------------------------
                 */
+                Route::get('/profile', [ProfileController::class, 'edit'])
+                    ->name('profile.edit');
 
-        Route::get('/profile', [ProfileController::class, 'edit'])
-            ->name('profile.edit');
+                Route::patch('/profile', [ProfileController::class, 'update'])
+                    ->name('profile.update');
 
-        Route::patch('/profile', [ProfileController::class, 'update'])
-            ->name('profile.update');
-
-        Route::delete('/profile', [ProfileController::class, 'destroy'])
-            ->name('profile.destroy');
+                Route::delete('/profile', [ProfileController::class, 'destroy'])
+                    ->name('profile.destroy');
+            });
 
 
 
