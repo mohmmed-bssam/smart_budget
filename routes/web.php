@@ -89,8 +89,14 @@ Route::prefix(LaravelLocalization::setLocale())
                     DashboardController::class,
                     'index'
                 ])->name('dashboard');
-                Route::resource('users', UserController::class);
                 Route::resource('settings', SettingController::class);
+                Route::patch('/users/{user}/role', [UserController::class, 'updateRole'])
+                    ->name('users.update-role');
+
+                Route::patch('/users/{user}/status', [UserController::class, 'toggleStatus'])
+                    ->name('users.toggle-status');
+
+                Route::resource('users', UserController::class);
                 Route::get('/reports', [ReportController::class, 'index'])
                     ->name('reports.index');
             });

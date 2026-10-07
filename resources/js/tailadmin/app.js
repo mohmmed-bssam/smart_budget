@@ -2,7 +2,7 @@ import { createPopper } from '@popperjs/core';
 import './bootstrap';
 import Alpine from 'alpinejs';
 import ApexCharts from 'apexcharts';
-
+import initGlobalSearch from './components/global-search';
 // flatpickr
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
@@ -50,4 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.querySelector('#calendar')) {
         import('./components/calendar-init').then(module => module.calendarInit());
     }
+
+    // Initialize global search
+    initGlobalSearch();
 });

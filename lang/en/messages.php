@@ -56,4 +56,40 @@ return [
     'expense' => 'Expense',
     'unknown_user' => 'Unknown User',
     'no_transactions_found' => 'No transactions found yet',
+    'users_management' => 'Users Management',
+'users_management_description' => 'Manage user accounts and permissions',
+
+'user' => 'User',
+'admin' => 'Administrator',
+'role' => 'Role',
+'status' => 'Status',
+
+'active' => 'Active',
+'inactive' => 'Inactive',
+
+'make_admin' => 'Make Admin',
+'make_user' => 'Make User',
+
+'activate' => 'Activate',
+'deactivate' => 'Deactivate',
+
+'role_updated' => 'User role updated successfully',
+'status_updated' => 'User status updated successfully',
+
+'cannot_change_own_role' => 'You cannot change your own role',
+'cannot_change_own_status' => 'You cannot deactivate your own account',
+'cannot_delete_yourself' => 'You cannot delete your own account',
+
+'delete_user_confirmation' => 'Are you sure you want to delete this user?',
+'change_role_confirmation' => 'Are you sure you want to change this user role?',
+'change_status_confirmation' => 'Are you sure you want to change this user status?',
+
+'search_users' => 'Search by name, email or phone...',
+'joined_at' => 'Joined',
+'actions' => 'Actions',
+'no_users_found' => 'No users found',
+'phone' => 'Phone',
+'current_account' => 'Current account',
+'delete' => 'Delete',
+'no_search_results' => 'No matching results found',
 ];

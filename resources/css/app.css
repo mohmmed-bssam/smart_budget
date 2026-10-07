@@ -2,3 +2,7 @@
 @tailwind components;
 @tailwind utilities; */
 @import './tailadmin/app.css';
+.fl-wrapper {
+    top: 85px !important;
+    z-index: 9999 !important;
+}

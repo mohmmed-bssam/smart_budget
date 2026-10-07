@@ -55,4 +55,40 @@ return [
     'expense' => 'مصروف',
     'unknown_user' => 'مستخدم غير معروف',
     'no_transactions_found' => 'لا توجد عمليات مالية حتى الآن',
+    'users_management' => 'إدارة المستخدمين',
+'users_management_description' => 'إدارة حسابات المستخدمين وصلاحياتهم',
+
+'user' => 'مستخدم',
+'admin' => 'مسؤول',
+'role' => 'الصلاحية',
+'status' => 'الحالة',
+
+'active' => 'نشط',
+'inactive' => 'غير نشط',
+
+'make_admin' => 'تعيين كمسؤول',
+'make_user' => 'تعيين كمستخدم',
+
+'activate' => 'تفعيل',
+'deactivate' => 'تعطيل',
+
+'role_updated' => 'تم تحديث صلاحية المستخدم بنجاح',
+'status_updated' => 'تم تحديث حالة المستخدم بنجاح',
+
+'cannot_change_own_role' => 'لا يمكنك تغيير صلاحية حسابك الحالي',
+'cannot_change_own_status' => 'لا يمكنك تعطيل حسابك الحالي',
+'cannot_delete_yourself' => 'لا يمكنك حذف حسابك الحالي',
+
+'delete_user_confirmation' => 'هل أنت متأكد من حذف هذا المستخدم؟',
+'change_role_confirmation' => 'هل أنت متأكد من تغيير صلاحية هذا المستخدم؟',
+'change_status_confirmation' => 'هل أنت متأكد من تغيير حالة هذا المستخدم؟',
+
+'search_users' => 'ابحث بالاسم أو البريد أو الهاتف...',
+'joined_at' => 'تاريخ التسجيل',
+'actions' => 'الإجراءات',
+'no_users_found' => 'لا يوجد مستخدمون',
+'phone' => 'الهاتف',
+'current_account' => 'الحساب الحالي',
+'delete' => 'حذف',
+'no_search_results' => 'لا توجد نتائج مطابقة للبحث',
 ];

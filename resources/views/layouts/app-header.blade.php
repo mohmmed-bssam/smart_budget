@@ -132,7 +132,7 @@
                     <input
                         type="text"
                         placeholder="{{ __('messages.search_placeholder') }}"
-
+                        id="globalSearch"
                         class="dark:bg-dark-900 h-11 w-[430px]
                                rounded-lg border border-gray-200 bg-transparent
                                py-2.5 text-sm text-gray-800

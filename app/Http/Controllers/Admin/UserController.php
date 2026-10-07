@@ -4,112 +4,83 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-
+    /**
+     * Display all users.
+     */
     public function index()
     {
-        $users = User::latest()->paginate(10);
+        $users = User::latest()->get();
 
         return view('admin.users.index', compact('users'));
     }
 
 
-    public function create()
+    /**
+     * Change user role: user <-> admin
+     */
+    public function updateRole(User $user)
     {
-        return view('admin.users.create');
-    }
+        // الأدمن ما بقدر يغيّر رول نفسه
+        if ($user->id === Auth::id()) {
+            flash()->warning(__('messages.cannot_change_own_role'));
 
+            return back();
+        }
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
+        $newRole = $user->role === 'admin'
+            ? 'user'
+            : 'admin';
 
-            'name' => 'required|string|max:255',
-
-            'email' => 'required|email|unique:users,email',
-
-            'password' => 'required|min:8',
-
-            'role' => 'required|in:admin,user',
-
-            'phone' => 'nullable|string',
-
-            'currency' => 'nullable|string|max:10',
-
+        $user->update([
+            'role' => $newRole,
         ]);
 
+        flash()->info(__('messages.role_updated'));
 
-        $validated['password'] = Hash::make($validated['password']);
-
-
-        User::create($validated);
-
-
-        flash()->success(__('messages.user_created'));
-
-
-        return redirect()
-            ->route('admin.users.index');
+        return back();
     }
 
 
-
-    public function show(User $user)
+    /**
+     * Activate / deactivate user.
+     */
+    public function toggleStatus(User $user)
     {
-        return view('admin.users.show', compact('user'));
-    }
+        if ($user->id === Auth::id()) {
+            flash()->warning(__('messages.cannot_change_own_status'));
 
+            return back();
+        }
 
-
-    public function edit(User $user)
-    {
-        return view('admin.users.edit', compact('user'));
-    }
-
-
-
-    public function update(Request $request, User $user)
-    {
-
-        $validated = $request->validate([
-
-            'name' => 'required|string|max:255',
-
-            'email' => 'required|email|unique:users,email,' . $user->id,
-
-            'role' => 'required|in:admin,user',
-
-            'phone' => 'nullable|string',
-
-            'currency' => 'nullable|string|max:10',
-
-            'is_active' => 'required|boolean',
-
+        $user->update([
+            'status' => !$user->status,
         ]);
 
+        flash()->info(__('messages.status_updated'));
 
-        $user->update($validated);
-        flash()->Info(__('messages.user_updated'));
-        return redirect()
-            ->route('admin.users.index');
+        return back();
     }
 
 
-
+    /**
+     * Delete user.
+     */
     public function destroy(User $user)
     {
+        if ($user->id === Auth::id()) {
+            flash()->warning(__('messages.cannot_delete_yourself'));
+
+            return back();
+        }
 
         $user->delete();
 
+        flash()->success(__('messages.user_deleted'));
 
-        flash()->warning(__('messages.user_deleted'));
-
-
-        return redirect()
-            ->route('admin.users.index');
+        return back();
     }
 }
