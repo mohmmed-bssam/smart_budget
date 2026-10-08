@@ -13,26 +13,37 @@ class ReportController extends Controller
     public function index()
     {
         $reports = [
+            'users_count' => User::where('role', 'user')->count(),
 
-            'users_count' => User::count(),
+            'active_users_count' => User::where('role', 'user')
+                ->where('status', 1)
+                ->count(),
+
+            'inactive_users_count' => User::where('role', 'user')
+                ->where('status', 0)
+                ->count(),
 
             'accounts_count' => Account::count(),
 
             'transactions_count' => Transaction::count(),
 
+            'income_transactions_count' => Transaction::where('type', 'income')
+                ->count(),
+
+            'expense_transactions_count' => Transaction::where('type', 'expense')
+                ->count(),
+
             'goals_count' => Goal::count(),
-
-
-            'total_income' => Transaction::where('type', 'income')
-                ->sum('amount'),
-
-
-            'total_expenses' => Transaction::where('type', 'expense')
-                ->sum('amount'),
-
         ];
 
+        $recentTransactions = Transaction::with('user')
+            ->latest('transaction_date')
+            ->take(10)
+            ->get();
 
-        return view('admin.reports.index', compact('reports'));
+        return view('admin.reports.index', compact(
+            'reports',
+            'recentTransactions'
+        ));
     }
 }

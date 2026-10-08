@@ -91,4 +91,24 @@ return [
 'current_account' => 'الحساب الحالي',
 'delete' => 'حذف',
 'no_search_results' => 'لا توجد نتائج مطابقة للبحث',
+'reports_description' => 'نظرة عامة على نشاط المستخدمين والحسابات والعمليات المالية',
+
+'active_users' => 'المستخدمون النشطون',
+'inactive_users' => 'المستخدمون غير النشطين',
+
+'income_transactions' => 'عمليات الدخل',
+'expense_transactions' => 'عمليات المصروف',
+'settings_description' => 'إدارة الإعدادات العامة لمنصة SmartBudget',
+
+'app_name' => 'اسم المنصة',
+'default_currency' => 'العملة الافتراضية',
+'support_email' => 'بريد الدعم',
+'items_per_page' => 'عدد العناصر في الصفحة',
+
+'registration_enabled' => 'السماح بتسجيل مستخدمين جدد',
+'registration_enabled_description' => 'عند إيقاف هذا الخيار لن يتمكن المستخدمون الجدد من إنشاء حساب.',
+
+'save_changes' => 'حفظ التغييرات',
+'settings_updated' => 'تم تحديث الإعدادات بنجاح',
+
 ];

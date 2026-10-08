@@ -11,10 +11,25 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\TransactionController;
+use App\Services\CurrencyService;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 
+Route::get('/test-currency', function (CurrencyService $currencyService) {
+    $amount = 100;
+
+    $rate = $currencyService->getRate('USD', 'EUR');
+    $converted = $currencyService->convert($amount, 'USD', 'EUR');
+
+    return [
+        'amount' => $amount,
+        'from' => 'USD',
+        'to' => 'EUR',
+        'rate' => $rate,
+        'converted' => $converted,
+    ];
+});
 Route::prefix(LaravelLocalization::setLocale())
     ->group(function () {
 
@@ -89,8 +104,11 @@ Route::prefix(LaravelLocalization::setLocale())
                     DashboardController::class,
                     'index'
                 ])->name('dashboard');
-                Route::resource('settings', SettingController::class);
-                Route::patch('/users/{user}/role', [UserController::class, 'updateRole'])
+Route::get('/settings', [SettingController::class, 'index'])
+    ->name('settings.index');
+
+Route::put('/settings', [SettingController::class, 'update'])
+    ->name('settings.update');                Route::patch('/users/{user}/role', [UserController::class, 'updateRole'])
                     ->name('users.update-role');
 
                 Route::patch('/users/{user}/status', [UserController::class, 'toggleStatus'])

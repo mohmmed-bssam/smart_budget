@@ -92,4 +92,24 @@ return [
 'current_account' => 'Current account',
 'delete' => 'Delete',
 'no_search_results' => 'No matching results found',
+'reports_description' => 'Overview of users, accounts, and financial activity',
+
+'active_users' => 'Active Users',
+'inactive_users' => 'Inactive Users',
+
+'income_transactions' => 'Income Transactions',
+'expense_transactions' => 'Expense Transactions',
+
+'settings_description' => 'Manage the general SmartBudget settings',
+
+'app_name' => 'Application Name',
+'default_currency' => 'Default Currency',
+'support_email' => 'Support Email',
+'items_per_page' => 'Items Per Page',
+
+'registration_enabled' => 'Allow New User Registration',
+'registration_enabled_description' => 'When disabled, new users will not be able to create an account.',
+
+'save_changes' => 'Save Changes',
+'settings_updated' => 'Settings updated successfully',
 ];

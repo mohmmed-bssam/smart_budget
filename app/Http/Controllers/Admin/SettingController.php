@@ -10,77 +10,53 @@ class SettingController extends Controller
 {
     public function index()
     {
-        $settings = Setting::latest()->get();
+        $settings = Setting::pluck('value', 'key');
 
         return view('admin.settings.index', compact('settings'));
     }
+public function update(Request $request)
+{
+    $data = $request->except([
+        '_token',
+        '_method',
+    ]);
 
+    $data['registration_enabled'] =
+        $request->has('registration_enabled') ? 1 : 0;
 
-    public function create()
-    {
-        return view('admin.settings.create');
+    foreach ($data as $key => $value) {
+        Setting::updateOrCreate(
+            ['key' => $key],
+            ['value' => $value]
+        );
     }
 
+    flash()->success(__('messages.settings_updated'));
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'key' => 'required|string|unique:settings,key',
-            'value' => 'nullable|string',
-        ]);
+    return back();
+}
+    // public function update(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'app_name' => ['required', 'string', 'max:100'],
+    //         'default_currency' => ['required', 'string', 'size:3'],
+    //         'support_email' => ['nullable', 'email', 'max:255'],
+    //         'items_per_page' => ['required', 'integer', 'min:5', 'max:100'],
+    //         'registration_enabled' => ['nullable', 'boolean'],
+    //     ]);
 
+    //     $validated['registration_enabled'] =
+    //         $request->boolean('registration_enabled') ? '1' : '0';
 
-        Setting::create($validated);
+    //     foreach ($validated as $key => $value) {
+    //         Setting::updateOrCreate(
+    //             ['key' => $key],
+    //             ['value' => $value]
+    //         );
+    //     }
 
+    //     flash()->info(__('messages.settings_updated'));
 
-        flash()->success(__('messages.setting_created'));
-
-
-        return redirect()
-            ->route('admin.settings.index');
-    }
-
-
-    public function show(Setting $setting)
-    {
-        return view('admin.settings.show', compact('setting'));
-    }
-
-
-    public function edit(Setting $setting)
-    {
-        return view('admin.settings.edit', compact('setting'));
-    }
-
-
-    public function update(Request $request, Setting $setting)
-    {
-        $validated = $request->validate([
-            'key' => 'required|string|unique:settings,key,' . $setting->id,
-            'value' => 'nullable|string',
-        ]);
-
-
-        $setting->update($validated);
-
-
-        flash()->info(__('messages.setting_updated'));
-
-
-        return redirect()
-            ->route('admin.settings.index');
-    }
-
-
-    public function destroy(Setting $setting)
-    {
-        $setting->delete();
-
-
-        flash()->warning(__('messages.setting_deleted'));
-
-
-        return redirect()
-            ->route('admin.settings.index');
-    }
+    //     return back();
+    // }
 }
