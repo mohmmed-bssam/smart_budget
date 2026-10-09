@@ -112,4 +112,64 @@ return [
 
 'save_changes' => 'Save Changes',
 'settings_updated' => 'Settings updated successfully',
+'accounts' => 'Accounts',
+'categories' => 'Categories',
+'transactions' => 'Transactions',
+'budgets' => 'Budgets',
+'goals' => 'Goals',
+'welcome_back' => 'Welcome back',
+'user_dashboard_description' => 'A quick overview of your financial activity',
+
+'income_this_month' => 'Income This Month',
+'expenses_this_month' => 'Expenses This Month',
+
+'your_latest_transactions' => 'Your latest financial transactions',
+'add_first_transaction' => 'Add First Transaction',
+'accounts_description' => 'Manage your accounts and balances across different currencies',
+
+'add_account' => 'Add Account',
+'add_first_account' => 'Add Your First Account',
+
+'current_balance' => 'Current Balance',
+
+'account_type_cash' => 'Cash',
+'account_type_bank' => 'Bank Account',
+'account_type_wallet' => 'Digital Wallet',
+'account_type_savings' => 'Savings Account',
+
+'view' => 'View',
+'edit' => 'Edit',
+
+'delete_account_confirmation' => 'Are you sure you want to delete this account?',
+
+'no_accounts_found' => 'No accounts found yet',
+'no_accounts_description' => 'Add your first financial account to start recording transactions and tracking your money.',
+'add_account_description' => 'Add a new account to track your balance and financial activity',
+
+'account_name' => 'Account Name',
+'account_name_placeholder' => 'Example: Main Bank Account',
+
+'account_type' => 'Account Type',
+'select_account_type' => 'Select account type',
+
+'opening_balance' => 'Opening Balance',
+
+'currency' => 'Currency',
+'select_currency' => 'Select currency',
+
+'currency_usd' => 'US Dollar',
+'currency_eur' => 'Euro',
+'currency_ils' => 'Israeli Shekel',
+'currency_jod' => 'Jordanian Dinar',
+'currency_gbp' => 'British Pound',
+'account_name_ar' => 'Account Name in Arabic',
+'account_name_en' => 'Account Name in English',
+'cancel' => 'Cancel',
+'save_account' => 'Save Account',
+'account_details' => 'Account Details',
+'back_to_accounts' => 'Back to Accounts',
+'account_transactions' => 'Account Transactions',
+'account_transactions_description' => 'Financial transactions associated with this account',
+'add_transaction' => 'Add Transaction',
+'transactions_will_appear_here' => 'Transactions for this account will appear here.',
 ];

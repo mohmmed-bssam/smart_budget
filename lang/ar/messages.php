@@ -111,4 +111,64 @@ return [
 'save_changes' => 'حفظ التغييرات',
 'settings_updated' => 'تم تحديث الإعدادات بنجاح',
 
+'accounts' => 'الحسابات',
+'categories' => 'التصنيفات',
+'transactions' => 'العمليات المالية',
+'budgets' => 'الميزانيات',
+'goals' => 'الأهداف',
+'welcome_back' => 'مرحباً بعودتك',
+'user_dashboard_description' => 'نظرة سريعة على وضعك المالي',
+
+'income_this_month' => 'دخل هذا الشهر',
+'expenses_this_month' => 'مصروفات هذا الشهر',
+
+'your_latest_transactions' => 'آخر العمليات المالية الخاصة بك',
+'add_first_transaction' => 'إضافة أول عملية',
+'accounts_description' => 'إدارة حساباتك وأرصدتك بعملات مختلفة',
+
+'add_account' => 'إضافة حساب',
+'add_first_account' => 'إضافة أول حساب',
+
+'current_balance' => 'الرصيد الحالي',
+
+'account_type_cash' => 'نقدي',
+'account_type_bank' => 'حساب بنكي',
+'account_type_wallet' => 'محفظة إلكترونية',
+'account_type_savings' => 'حساب توفير',
+
+'view' => 'عرض',
+'edit' => 'تعديل',
+
+'delete_account_confirmation' => 'هل أنت متأكد من حذف هذا الحساب؟',
+
+'no_accounts_found' => 'لا توجد حسابات حتى الآن',
+'no_accounts_description' => 'ابدأ بإضافة أول حساب مالي حتى تتمكن من تسجيل العمليات ومتابعة أموالك.',
+'add_account_description' => 'أضف حساباً جديداً لتتبع رصيدك وعملياتك المالية',
+
+'account_name' => 'اسم الحساب',
+'account_name_placeholder' => 'مثلاً: الحساب البنكي الرئيسي',
+
+'account_type' => 'نوع الحساب',
+'select_account_type' => 'اختر نوع الحساب',
+
+'opening_balance' => 'الرصيد الافتتاحي',
+
+'currency' => 'العملة',
+'select_currency' => 'اختر العملة',
+
+'currency_usd' => 'دولار أمريكي',
+'currency_eur' => 'يورو',
+'currency_ils' => 'شيكل إسرائيلي',
+'currency_jod' => 'دينار أردني',
+'currency_gbp' => 'جنيه إسترليني',
+'account_name_ar' => 'اسم الحساب بالعربية',
+'account_name_en' => 'اسم الحساب بالإنجليزية',
+'cancel' => 'إلغاء',
+'save_account' => 'حفظ الحساب',
+'account_details' => 'تفاصيل الحساب',
+'back_to_accounts' => 'العودة إلى الحسابات',
+'account_transactions' => 'عمليات الحساب',
+'account_transactions_description' => 'العمليات المالية المرتبطة بهذا الحساب',
+'add_transaction' => 'إضافة عملية',
+'transactions_will_appear_here' => 'ستظهر العمليات المالية الخاصة بهذا الحساب هنا.',
 ];

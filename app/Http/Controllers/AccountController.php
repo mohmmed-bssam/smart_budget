@@ -5,124 +5,102 @@ namespace App\Http\Controllers;
 use App\Models\Account;
 use Illuminate\Http\Request;
 
-class AccountController extends Controller
+class AccountController extends Controller {
+
+    public function index() {
+        $accounts = Account::where( 'user_id', auth()->id() )
+        ->latest()
+        ->paginate( 10 );
+
+        return view( 'accounts.index', compact( 'accounts' ) );
+    }
+
+    public function create() {
+        return view( 'accounts.create' );
+    }
+
+public function store(Request $request)
 {
+    $request->validate([
+        'name_en' => 'required|string|max:255',
+        'name_ar' => 'required|string|max:255',
+        'type' => 'required|in:cash,bank,wallet,savings',
+        'balance' => 'required|numeric|min:0',
+        'currency' => 'required|string|size:3',
+    ]);
 
-    public function index()
-    {
-        $accounts = Account::where('user_id', auth()->id())
-            ->latest()
-            ->paginate(10);
+    Account::create([
+        'user_id' => auth()->id(),
 
-        return view('accounts.index', compact('accounts'));
+        'name' => [
+            'en' => $request->name_en,
+            'ar' => $request->name_ar,
+        ],
+
+        'type' => $request->type,
+        'balance' => $request->balance,
+        'currency' => $request->currency,
+    ]);
+
+    flash()->success(__('messages.account_created'));
+
+    return redirect()->route('accounts.index');
+}
+
+    public function show( Account $account ) {
+        $this->authorizeAccount( $account );
+
+        return view( 'accounts.show', compact( 'account' ) );
     }
 
+    public function edit( Account $account ) {
+        $this->authorizeAccount( $account );
 
-    public function create()
-    {
-        return view('accounts.create');
+        return view( 'accounts.edit', compact( 'account' ) );
     }
 
+   public function update(Request $request, Account $account)
+{
+    $this->authorizeAccount($account);
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
+    $request->validate([
+        'name_en' => 'required|string|max:255',
+        'name_ar' => 'required|string|max:255',
+        'type' => 'required|in:cash,bank,wallet,savings',
+        'balance' => 'required|numeric|min:0',
+        'currency' => 'required|string|size:3',
+    ]);
 
-            'name' => 'required|string|max:255',
+    $account->update([
+        'name' => [
+            'en' => $request->name_en,
+            'ar' => $request->name_ar,
+        ],
 
-            'type' => 'required|string',
+        'type' => $request->type,
+        'balance' => $request->balance,
+        'currency' => $request->currency,
+    ]);
 
-            'balance' => 'required|numeric',
+    flash()->success(__('messages.account_updated'));
 
-            'currency' => 'required|string|max:10',
+    return redirect()->route('accounts.index');
+}
 
-        ]);
-
-
-        $validated['user_id'] = auth()->id();
-
-
-        Account::create($validated);
-
-
-        flash()->success(__('messages.account_created'));
-
-
-        return redirect()
-            ->route('accounts.index');
-    }
-
-
-
-    public function show(Account $account)
-    {
-        $this->authorizeAccount($account);
-
-        return view('accounts.show', compact('account'));
-    }
-
-
-
-    public function edit(Account $account)
-    {
-        $this->authorizeAccount($account);
-
-        return view('accounts.edit', compact('account'));
-    }
-
-
-
-    public function update(Request $request, Account $account)
-    {
-        $this->authorizeAccount($account);
-
-
-        $validated = $request->validate([
-
-            'name' => 'required|string|max:255',
-
-            'type' => 'required|string',
-
-            'balance' => 'required|numeric',
-
-            'currency' => 'required|string|max:10',
-
-        ]);
-
-
-        $account->update($validated);
-
-
-        flash()->success(__('messages.account_updated'));
-
-
-        return redirect()
-            ->route('accounts.index');
-    }
-
-
-
-    public function destroy(Account $account)
-    {
-        $this->authorizeAccount($account);
-
+    public function destroy( Account $account ) {
+        $this->authorizeAccount( $account );
 
         $account->delete();
 
-
-        flash()->warning(__('messages.account_deleted'));
-
+        flash()->warning( __( 'messages.account_deleted' ) );
 
         return redirect()
-            ->route('accounts.index');
+        ->route( 'accounts.index' );
     }
 
-
-
-    private function authorizeAccount(Account $account)
-    {
-        if ($account->user_id !== auth()->id()) {
-            abort(403);
+    private function authorizeAccount( Account $account ) {
+        if ( $account->user_id !== auth()->id() ) {
+            abort( 403 );
         }
     }
 }

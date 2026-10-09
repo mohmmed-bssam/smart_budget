@@ -9,6 +9,10 @@ class Account extends Model
     //
 
     protected $guarded=[];
+    protected $casts = [
+    'name' => 'array',
+    'balance' => 'decimal:2',
+];
     public function user()
     {
         return $this->belongsTo(User::class);

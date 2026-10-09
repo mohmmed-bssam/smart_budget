@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController as ControllersDashboardController;
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\TransactionController;
@@ -63,10 +64,7 @@ Route::prefix(LaravelLocalization::setLocale())
         Route::middleware(['auth', 'verified'])
             ->group(function () {
 
-                Route::get('/dashboard', function () {
-                    return view('dashboard');
-                })->name('dashboard');
-
+                Route::get('/dashboard', [ControllersDashboardController::class, 'index'])->name('dashboard');
                 Route::resource('accounts', AccountController::class);
                 Route::resource('categories', CategoryController::class);
                 Route::resource('transactions', TransactionController::class);
