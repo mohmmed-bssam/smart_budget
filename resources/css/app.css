@@ -1,8 +1,23 @@
 /* @tailwind base;
 @tailwind components;
 @tailwind utilities; */
+
+
 @import './tailadmin/app.css';
+
 .fl-wrapper {
     top: 85px !important;
-    z-index: 9999 !important;
+    z-index: 99999 !important;
+}
+
+/* Arabic */
+html[lang="ar"] .fl-wrapper {
+    left: 24px !important;
+    right: auto !important;
+}
+
+/* English */
+html[lang="en"] .fl-wrapper {
+    right: 24px !important;
+    left: auto !important;
 }

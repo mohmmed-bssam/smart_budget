@@ -172,4 +172,61 @@ return [
 'account_transactions_description' => 'Financial transactions associated with this account',
 'add_transaction' => 'Add Transaction',
 'transactions_will_appear_here' => 'Transactions for this account will appear here.',
+
+'categories_description' => 'Manage income and expense categories',
+'add_category' => 'Add Category',
+'add_first_category' => 'Add Your First Category',
+'add_category_description' => 'Create a new category to organize your financial transactions',
+
+'category_name_ar' => 'Category Name in Arabic',
+'category_name_en' => 'Category Name in English',
+'category_name' => 'Category Name',
+
+'select_category_type' => 'Select category type',
+
+'icon' => 'Icon',
+'icon_placeholder' => 'Example: 🍔 or 💰',
+'color' => 'Color',
+
+'save_category' => 'Save Category',
+'edit_category' => 'Edit Category',
+
+'system_category' => 'System Category',
+'personal_category' => 'Personal Category',
+
+'category_details' => 'Category Details',
+'category_scope' => 'Category Scope',
+'back_to_categories' => 'Back to Categories',
+
+'delete_category_confirmation' => 'Are you sure you want to delete this category?',
+
+'no_categories_found' => 'No categories found yet',
+'no_categories_description' => 'Add a category to organize your income and expenses.',
+// en
+'category_type_mismatch' => 'The selected category does not match the transaction type.',
+// en
+
+'transactions_description' => 'Manage your income, expenses, and financial transactions',
+'add_transaction_description' => 'Add a new financial transaction to one of your accounts',
+
+'select_transaction_type' => 'Select transaction type',
+'select_account' => 'Select account',
+'select_category' => 'Select category',
+
+'account' => 'Account',
+'category' => 'Category',
+'title' => 'Title',
+'description' => 'Description',
+'transaction_date' => 'Transaction Date',
+'transaction_type' => 'Transaction Type',
+'transaction_amount' => 'Transaction Amount',
+
+'save_transaction' => 'Save Transaction',
+'edit_transaction' => 'Edit Transaction',
+
+'transaction_details' => 'Financial Transaction Details',
+'back_to_transactions' => 'Back to Transactions',
+
+'no_description' => 'No description',
+'delete_transaction_confirmation' => 'Are you sure you want to delete this transaction?',
 ];

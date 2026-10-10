@@ -7,7 +7,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ $title ?? 'Dashboard' }} | TailAdmin - Laravel Tailwind CSS Admin Dashboard Template</title>
-
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+/>
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -92,7 +95,7 @@
                 toggleExpanded() {
                     this.isExpanded = !this.isExpanded;
                     this.isMobileOpen = false;
-                    
+
                     if (window.innerWidth >= 1280) {
                         localStorage.setItem('sidebarExpanded', this.isExpanded);
                     }
@@ -140,7 +143,7 @@
             }
         })();
     </script>
-    
+
 
 </head>
 

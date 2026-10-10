@@ -171,4 +171,60 @@ return [
 'account_transactions_description' => 'العمليات المالية المرتبطة بهذا الحساب',
 'add_transaction' => 'إضافة عملية',
 'transactions_will_appear_here' => 'ستظهر العمليات المالية الخاصة بهذا الحساب هنا.',
+
+'categories_description' => 'إدارة تصنيفات الدخل والمصروفات',
+'add_category' => 'إضافة تصنيف',
+'add_first_category' => 'إضافة أول تصنيف',
+'add_category_description' => 'أنشئ تصنيفاً جديداً لتنظيم عملياتك المالية',
+
+'category_name_ar' => 'اسم التصنيف بالعربية',
+'category_name_en' => 'اسم التصنيف بالإنجليزية',
+'category_name' => 'اسم التصنيف',
+
+'select_category_type' => 'اختر نوع التصنيف',
+
+'icon' => 'الأيقونة',
+'icon_placeholder' => 'مثلاً: 🍔 أو 💰',
+'color' => 'اللون',
+
+'save_category' => 'حفظ التصنيف',
+'edit_category' => 'تعديل التصنيف',
+
+'system_category' => 'تصنيف عام',
+'personal_category' => 'تصنيف شخصي',
+
+'category_details' => 'تفاصيل التصنيف',
+'category_scope' => 'نوع التصنيف',
+'back_to_categories' => 'العودة إلى التصنيفات',
+
+'delete_category_confirmation' => 'هل أنت متأكد من حذف هذا التصنيف؟',
+
+'no_categories_found' => 'لا توجد تصنيفات حتى الآن',
+'no_categories_description' => 'أضف تصنيفاً جديداً لتنظيم دخلك ومصروفاتك.',
+
+'category_type_mismatch' => 'التصنيف المختار لا يتوافق مع نوع العملية.',
+// ar
+
+'transactions_description' => 'إدارة دخلك ومصروفاتك وعملياتك المالية',
+'add_transaction_description' => 'أضف عملية مالية جديدة إلى أحد حساباتك',
+
+'select_transaction_type' => 'اختر نوع العملية',
+'select_account' => 'اختر الحساب',
+'select_category' => 'اختر التصنيف',
+
+'account' => 'الحساب',
+'category' => 'التصنيف',
+'title' => 'العنوان',
+'description' => 'الوصف',
+'transaction_date' => 'تاريخ العملية',
+'transaction_type' => 'نوع العملية',
+'transaction_amount' => 'مبلغ العملية',
+'save_transaction' => 'حفظ العملية',
+'edit_transaction' => 'تعديل العملية',
+
+'transaction_details' => 'تفاصيل العملية المالية',
+'back_to_transactions' => 'العودة إلى العمليات المالية',
+
+'no_description' => 'لا يوجد وصف',
+'delete_transaction_confirmation' => 'هل أنت متأكد من حذف هذه العملية؟',
 ];

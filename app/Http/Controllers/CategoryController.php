@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-
     public function index()
     {
         $categories = Category::where('user_id', auth()->id())
@@ -15,125 +14,90 @@ class CategoryController extends Controller
             ->latest()
             ->paginate(10);
 
-
         return view('categories.index', compact('categories'));
     }
-
-
 
     public function create()
     {
         return view('categories.create');
     }
 
-
-
     public function store(Request $request)
     {
-        $validated = $request->validate([
-
-            'name' => 'required|string|max:255',
-
+        $request->validate([
+            'name_ar' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
             'type' => 'required|in:income,expense',
-
-            'icon' => 'nullable|string',
-
-            'color' => 'nullable|string',
-
+            'icon' => 'nullable|string|max:255',
         ]);
 
+        Category::create([
+            'user_id' => auth()->id(),
 
-        $validated['user_id'] = auth()->id();
+            'name' => [
+                'ar' => $request->name_ar,
+                'en' => $request->name_en,
+            ],
 
-
-        Category::create($validated);
-
+            'type' => $request->type,
+            'icon' => $request->icon,
+        ]);
 
         flash()->success(__('messages.category_created'));
 
-
-        return redirect()
-            ->route('categories.index');
+        return redirect()->route('categories.index');
     }
-
-
-
 
     public function show(Category $category)
     {
         $this->authorizeCategory($category);
 
-
         return view('categories.show', compact('category'));
     }
-
-
-
 
     public function edit(Category $category)
     {
         $this->authorizeCategory($category);
 
-
         return view('categories.edit', compact('category'));
     }
-
-
-
 
     public function update(Request $request, Category $category)
     {
         $this->authorizeCategory($category);
 
-
-        $validated = $request->validate([
-
-            'name' => 'required|string|max:255',
-
+        $request->validate([
+            'name_ar' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
             'type' => 'required|in:income,expense',
-
-            'icon' => 'nullable|string',
-
-            'color' => 'nullable|string',
-
+            'icon' => 'nullable|string|max:255',
         ]);
 
+        $category->update([
+            'name' => [
+                'ar' => $request->name_ar,
+                'en' => $request->name_en,
+            ],
 
-
-        $category->update($validated);
-
-
+            'type' => $request->type,
+            'icon' => $request->icon,
+        ]);
 
         flash()->success(__('messages.category_updated'));
 
-
-
-        return redirect()
-            ->route('categories.index');
+        return redirect()->route('categories.index');
     }
-
-
-
 
     public function destroy(Category $category)
     {
         $this->authorizeCategory($category);
 
-
         $category->delete();
-
-
 
         flash()->warning(__('messages.category_deleted'));
 
-
-
-        return redirect()
-            ->route('categories.index');
+        return redirect()->route('categories.index');
     }
-
-
-
 
     private function authorizeCategory(Category $category)
     {
