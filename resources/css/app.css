@@ -21,3 +21,300 @@ html[lang="en"] .fl-wrapper {
     right: 24px !important;
     left: auto !important;
 }
+:root {
+    --sb-bg: #f7f1e8;
+    --sb-surface: #fffdf9;
+    --sb-surface-soft: #f3e8d8;
+
+    --sb-primary: #6b4a2d;
+    --sb-primary-dark: #3e2a1f;
+
+    --sb-gold: #b88945;
+    --sb-gold-soft: #d8b77a;
+
+    --sb-text: #2b2118;
+    --sb-muted: #8a7a68;
+
+    --sb-border: #e8ddcf;
+
+    --sb-success: #4f7a5a;
+    --sb-danger: #b85c5c;
+}
+
+.dark {
+    --sb-bg: #1b1511;
+    --sb-surface: #241b16;
+    --sb-surface-soft: #30231b;
+
+    --sb-primary: #d0a15d;
+    --sb-primary-dark: #e0bb7a;
+
+    --sb-gold: #d0a15d;
+    --sb-gold-soft: #e3c38f;
+
+    --sb-text: #f7f1e8;
+    --sb-muted: #c4b3a1;
+
+    --sb-border: #463429;
+
+    --sb-success: #7eaa89;
+    --sb-danger: #df7e7e;
+}
+
+/* SmartBudget theme helpers */
+
+.sb-page {
+    background-color: var(--sb-bg);
+    color: var(--sb-text);
+}
+
+.sb-surface {
+    background-color: var(--sb-surface);
+    border-color: var(--sb-border);
+}
+
+.sb-surface-soft {
+    background-color: var(--sb-surface-soft);
+}
+
+.sb-text {
+    color: var(--sb-text);
+}
+
+.sb-muted {
+    color: var(--sb-muted);
+}
+
+.sb-border {
+    border-color: var(--sb-border);
+}
+
+.sb-primary-text {
+    color: var(--sb-primary);
+}
+
+.sb-primary-bg {
+    background-color: var(--sb-primary);
+    color: white;
+}
+
+.sb-primary-bg:hover {
+    background-color: var(--sb-primary-dark);
+}
+
+.sb-nav-active {
+    background-color: rgba(184, 137, 69, 0.14);
+    color: var(--sb-primary);
+}
+
+.dark .sb-nav-active {
+    background-color: rgba(208, 161, 93, 0.16);
+}
+
+.sb-icon-box {
+    background-color: var(--sb-surface-soft);
+    color: var(--sb-primary);
+}
+
+.sb-input {
+    background-color: var(--sb-surface);
+    border-color: var(--sb-border);
+    color: var(--sb-text);
+}
+
+.sb-input:focus {
+    border-color: var(--sb-gold);
+    box-shadow: 0 0 0 3px rgba(184, 137, 69, 0.12);
+}
+/* =========================================================
+   SmartBudget - TailAdmin Overrides
+   ========================================================= */
+
+
+/* ---------- Sidebar menu item ---------- */
+
+.menu-item {
+    color: var(--sb-muted) !important;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease !important;
+}
+
+
+/* Inactive item */
+
+.menu-item-inactive {
+    color: var(--sb-muted) !important;
+}
+
+.menu-item-inactive:hover {
+    background-color: var(--sb-surface-soft) !important;
+    color: var(--sb-text) !important;
+}
+
+
+/* Active item */
+
+.menu-item-active {
+    background-color: rgba(184, 137, 69, 0.14) !important;
+    color: #6b4a2d !important;
+}
+
+.dark .menu-item-active {
+    background-color: rgba(208, 161, 93, 0.16) !important;
+    color: #d8b77a !important;
+}
+
+
+/* ---------- Sidebar icons ---------- */
+
+.menu-item-icon-inactive {
+    color: var(--sb-muted) !important;
+}
+
+.menu-item:hover .menu-item-icon-inactive {
+    color: var(--sb-primary) !important;
+}
+
+
+/* Active icon */
+
+.menu-item-icon-active {
+    color: #8a6238 !important;
+}
+
+.dark .menu-item-icon-active {
+    color: #d8b77a !important;
+}
+
+
+/* ---------- Sidebar text ---------- */
+
+.menu-item-text {
+    color: inherit !important;
+}
+
+
+/* ---------- Brand colors override ---------- */
+
+/*
+   TailAdmin uses brand-* classes in several places.
+   These overrides make existing components match SmartBudget
+   without rewriting every Blade file right now.
+*/
+
+.bg-brand-50 {
+    background-color: #f5ebdd !important;
+}
+
+.bg-brand-100 {
+    background-color: #ead8bd !important;
+}
+
+.bg-brand-500 {
+    background-color: #6b4a2d !important;
+}
+
+.bg-brand-600 {
+    background-color: #5e4029 !important;
+}
+
+.bg-brand-700 {
+    background-color: #4d3524 !important;
+}
+
+
+.text-brand-400 {
+    color: #d8b77a !important;
+}
+
+.text-brand-500 {
+    color: #8a6238 !important;
+}
+
+.text-brand-600 {
+    color: #6b4a2d !important;
+}
+
+.text-brand-700 {
+    color: #5e4029 !important;
+}
+
+
+.border-brand-300 {
+    border-color: #d8b77a !important;
+}
+
+.border-brand-500 {
+    border-color: #b88945 !important;
+}
+
+.border-brand-800 {
+    border-color: #8a6238 !important;
+}
+
+
+/* ---------- Focus ---------- */
+
+.focus\:border-brand-300:focus {
+    border-color: #b88945 !important;
+}
+
+.focus\:border-brand-500:focus {
+    border-color: #b88945 !important;
+}
+
+.focus\:ring-brand-500\/10:focus {
+    --tw-ring-color: rgba(184, 137, 69, 0.12) !important;
+}
+
+
+/* ---------- Buttons ---------- */
+
+.hover\:bg-brand-600:hover {
+    background-color: #3e2a1f !important;
+}
+
+.dark .hover\:bg-brand-600:hover {
+    background-color: #d0a15d !important;
+}
+
+
+/* ---------- General page background ---------- */
+
+body {
+    background-color: var(--sb-bg);
+    color: var(--sb-text);
+}
+
+
+/* ---------- Cards / common TailAdmin surfaces ---------- */
+
+/*
+   These help existing white / gray cards blend better
+   without touching every page immediately.
+*/
+
+.dark .dark\:bg-white\/\[0\.03\] {
+    background-color: var(--sb-surface) !important;
+}
+
+
+/* ---------- Scrollbar optional ---------- */
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--sb-border);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--sb-gold);
+}
+
+
+/* ---------- Selection ---------- */
+
+::selection {
+    background-color: rgba(184, 137, 69, 0.25);
+    color: var(--sb-text);
+}

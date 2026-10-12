@@ -229,4 +229,126 @@ return [
 
 'no_description' => 'No description',
 'delete_transaction_confirmation' => 'Are you sure you want to delete this transaction?',
+'login' => 'Log In',
+'login_description' => 'Enter your account details to continue',
+'login_welcome_text' => 'Manage your accounts, expenses, and financial goals easily from one place.',
+'manage_money_smartly' => 'Manage your money smarter',
+
+'email' => 'Email',
+'email_placeholder' => 'Enter your email',
+
+'password' => 'Password',
+'password_placeholder' => 'Enter your password',
+
+'remember_me' => 'Remember me',
+'forgot_password' => 'Forgot your password?',
+
+'no_account' => 'Don’t have an account?',
+'create_account' => 'Create an account',
+'register' => 'Create Account',
+'register_description' => 'Create your account and start managing your money',
+'register_welcome_text' => 'Create your account and start tracking your income, expenses, budgets, and financial goals easily.',
+
+'name' => 'Full Name',
+'name_placeholder' => 'Enter your full name',
+
+'confirm_password' => 'Confirm Password',
+'confirm_password_placeholder' => 'Confirm your password',
+
+'already_have_account' => 'Already have an account?',
+'forgot_password_title' => 'Forgot Your Password?',
+'forgot_password_description' => 'Enter your email address and we will send you a password reset link.',
+'forgot_password_side_text' => 'No worries. You can recover your account easily and get back to managing your money.',
+'send_reset_link' => 'Send Reset Link',
+'remember_password' => 'Remember your password?',
+'confirm_password_title' => 'Confirm Password',
+'confirm_password_description' => 'This is a secure area. Please confirm your password before continuing.',
+'confirm_password_side_text' => 'To protect your financial information, we need to verify your identity before continuing.',
+'confirm' => 'Confirm',
+'reset_password_title' => 'Reset Password',
+'reset_password_description' => 'Enter a new password for your account.',
+'reset_password_side_text' => 'Create a new secure password and get back to managing your money.',
+'reset_password' => 'Reset Password',
+'verify_email_title' => 'Verify Your Email',
+'verify_email_description' => 'We sent a verification link to your email address. Click the link to activate your account and start using SmartBudget.',
+'verify_email_side_text' => 'We just need to confirm your email address before you start managing your accounts and money.',
+'verification_link_sent' => 'A new verification link has been sent to your email address.',
+'resend_verification_email' => 'Resend Verification Email',
+
+'account_inactive' => 'Your account is currently inactive. Please contact the administrator.',
+// en
+'budget_expense_category_only' => 'Budgets can only be created for expense categories.',
+'budget_already_exists' => 'A budget already exists for this category in the selected month and year.',
+'budgets_description' => 'Set monthly budgets and track your spending',
+'add_budget' => 'Add Budget',
+'add_budget_description' => 'Set how much you want to spend on a category during the month',
+'edit_budget' => 'Edit Budget',
+'edit_budget_description' => 'Update the budget amount or its period',
+
+'budget' => 'Budget',
+'budget_amount' => 'Budget Amount',
+'save_budget' => 'Save Budget',
+
+'month' => 'Month',
+'year' => 'Year',
+
+'spent' => 'Spent',
+'remaining' => 'Remaining',
+
+'budget_progress' => 'Budget Progress',
+'budget_progress_description' => 'Percentage of the budget that has been spent',
+
+'budget_exceeded' => 'You have exceeded this budget.',
+'budget_exceeded_by' => 'Budget exceeded by',
+
+'back_to_budgets' => 'Back to Budgets',
+
+'no_budgets_found' => 'No budgets found',
+'no_budgets_description' => 'Create your first budget to track your monthly spending.',
+'add_first_budget' => 'Add First Budget',
+
+'delete_budget_confirmation' => 'Are you sure you want to delete this budget?',
+
+'month_1' => 'January',
+'month_2' => 'February',
+'month_3' => 'March',
+'month_4' => 'April',
+'month_5' => 'May',
+'month_6' => 'June',
+'month_7' => 'July',
+'month_8' => 'August',
+'month_9' => 'September',
+'month_10' => 'October',
+'month_11' => 'November',
+'month_12' => 'December',
+'equivalent_to' => 'Equivalent to',
+'goals_description' => 'Set your financial goals and track your progress',
+'add_goal' => 'Add Goal',
+'add_goal_description' => 'Create a new financial goal and start saving toward it',
+'edit_goal' => 'Edit Goal',
+'edit_goal_description' => 'Update your financial goal details',
+
+'goal_title' => 'Goal Title',
+'target_amount' => 'Target Amount',
+'saved_amount' => 'Saved Amount',
+'goal_progress' => 'Goal Progress',
+'goal_progress_description' => 'Percentage of the target amount you have saved',
+
+'deadline' => 'Deadline',
+
+'status_active' => 'Active',
+'status_completed' => 'Completed',
+'status_cancelled' => 'Cancelled',
+
+'save_goal' => 'Save Goal',
+'back_to_goals' => 'Back to Goals',
+
+'no_goals_found' => 'No goals found',
+'no_goals_description' => 'Start by creating your first financial goal.',
+'add_first_goal' => 'Add First Goal',
+
+'delete_goal_confirmation' => 'Are you sure you want to delete this goal?',
+
+'savings_history' => 'Savings History',
+'no_savings_found' => 'No savings have been added to this goal yet.',
 ];

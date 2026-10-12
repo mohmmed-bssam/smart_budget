@@ -227,4 +227,125 @@ return [
 
 'no_description' => 'لا يوجد وصف',
 'delete_transaction_confirmation' => 'هل أنت متأكد من حذف هذه العملية؟',
+'login' => 'تسجيل الدخول',
+'login_description' => 'أدخل بيانات حسابك للمتابعة',
+'login_welcome_text' => 'تابع حساباتك ومصروفاتك وأهدافك المالية بكل سهولة من مكان واحد.',
+'manage_money_smartly' => 'إدارة أموالك بطريقة أذكى',
+
+'email' => 'البريد الإلكتروني',
+'email_placeholder' => 'أدخل البريد الإلكتروني',
+
+'password' => 'كلمة المرور',
+'password_placeholder' => 'أدخل كلمة المرور',
+
+'remember_me' => 'تذكرني',
+'forgot_password' => 'نسيت كلمة المرور؟',
+
+'no_account' => 'ليس لديك حساب؟',
+'create_account' => 'إنشاء حساب',
+'register' => 'إنشاء حساب',
+'register_description' => 'أنشئ حسابك وابدأ بتنظيم أموالك',
+'register_welcome_text' => 'أنشئ حسابك وابدأ بمتابعة دخلك ومصروفاتك وميزانياتك وأهدافك المالية بسهولة.',
+
+'name' => 'الاسم الكامل',
+'name_placeholder' => 'أدخل اسمك الكامل',
+
+'confirm_password' => 'تأكيد كلمة المرور',
+'confirm_password_placeholder' => 'أعد إدخال كلمة المرور',
+
+'already_have_account' => 'لديك حساب بالفعل؟',
+'forgot_password_title' => 'نسيت كلمة المرور؟',
+'forgot_password_description' => 'أدخل بريدك الإلكتروني وسنرسل لك رابطاً لإعادة تعيين كلمة المرور.',
+'forgot_password_side_text' => 'لا تقلق، يمكنك استعادة حسابك بسهولة والعودة لإدارة أموالك.',
+'send_reset_link' => 'إرسال رابط إعادة التعيين',
+'remember_password' => 'تذكرت كلمة المرور؟',
+'confirm_password_title' => 'تأكيد كلمة المرور',
+'confirm_password_description' => 'هذه منطقة آمنة. يرجى تأكيد كلمة المرور قبل المتابعة.',
+'confirm_password_side_text' => 'لحماية معلوماتك المالية، نحتاج للتأكد من هويتك قبل الوصول إلى هذه الصفحة.',
+'confirm' => 'تأكيد',
+'reset_password_title' => 'إعادة تعيين كلمة المرور',
+'reset_password_description' => 'أدخل كلمة مرور جديدة لحسابك.',
+'reset_password_side_text' => 'أنشئ كلمة مرور جديدة وآمنة للعودة إلى حسابك وإدارة أموالك.',
+'reset_password' => 'إعادة تعيين كلمة المرور',
+'verify_email_title' => 'تحقق من بريدك الإلكتروني',
+'verify_email_description' => 'أرسلنا لك رابط تحقق على بريدك الإلكتروني. اضغط على الرابط لتفعيل حسابك والبدء باستخدام SmartBudget.',
+'verify_email_side_text' => 'نحتاج فقط لتأكيد بريدك الإلكتروني قبل أن تبدأ بإدارة حساباتك وأموالك.',
+'verification_link_sent' => 'تم إرسال رابط تحقق جديد إلى بريدك الإلكتروني.',
+'resend_verification_email' => 'إعادة إرسال رابط التحقق',
+'account_inactive' => 'حسابك غير نشط حالياً. يرجى التواصل مع الإدارة.',
+// ar
+'budget_expense_category_only' => 'يمكن إنشاء الميزانية لتصنيفات المصروفات فقط.',
+'budget_already_exists' => 'توجد ميزانية بالفعل لهذا التصنيف في نفس الشهر والسنة.',
+'budgets_description' => 'حدد ميزانياتك الشهرية وتابع مصروفاتك',
+'add_budget' => 'إضافة ميزانية',
+'add_budget_description' => 'حدد الحد الذي تريد إنفاقه على تصنيف معين خلال الشهر',
+'edit_budget' => 'تعديل الميزانية',
+'edit_budget_description' => 'عدّل قيمة الميزانية أو الفترة الخاصة بها',
+
+'budget' => 'الميزانية',
+'budget_amount' => 'قيمة الميزانية',
+'save_budget' => 'حفظ الميزانية',
+
+'month' => 'الشهر',
+'year' => 'السنة',
+
+'spent' => 'تم إنفاقه',
+'remaining' => 'المتبقي',
+
+'budget_progress' => 'تقدم الميزانية',
+'budget_progress_description' => 'نسبة المصروفات من إجمالي الميزانية',
+
+'budget_exceeded' => 'لقد تجاوزت هذه الميزانية.',
+'budget_exceeded_by' => 'تم تجاوز الميزانية بمقدار',
+
+'back_to_budgets' => 'العودة إلى الميزانيات',
+
+'no_budgets_found' => 'لا توجد ميزانيات حتى الآن',
+'no_budgets_description' => 'أنشئ أول ميزانية لمتابعة مصروفاتك الشهرية.',
+'add_first_budget' => 'إضافة أول ميزانية',
+
+'delete_budget_confirmation' => 'هل أنت متأكد من حذف هذه الميزانية؟',
+
+'month_1' => 'يناير',
+'month_2' => 'فبراير',
+'month_3' => 'مارس',
+'month_4' => 'أبريل',
+'month_5' => 'مايو',
+'month_6' => 'يونيو',
+'month_7' => 'يوليو',
+'month_8' => 'أغسطس',
+'month_9' => 'سبتمبر',
+'month_10' => 'أكتوبر',
+'month_11' => 'نوفمبر',
+'month_12' => 'ديسمبر',
+'equivalent_to' => 'ما يعادل',
+'goals_description' => 'حدد أهدافك المالية وتابع تقدمك نحو تحقيقها',
+'add_goal' => 'إضافة هدف',
+'add_goal_description' => 'أنشئ هدفًا ماليًا جديدًا وابدأ الادخار لتحقيقه',
+'edit_goal' => 'تعديل الهدف',
+'edit_goal_description' => 'عدّل بيانات الهدف المالي',
+
+'goal_title' => 'اسم الهدف',
+'target_amount' => 'المبلغ المستهدف',
+'saved_amount' => 'المبلغ المدخر',
+'goal_progress' => 'تقدم الهدف',
+'goal_progress_description' => 'نسبة ما تم ادخاره من المبلغ المستهدف',
+
+'deadline' => 'الموعد النهائي',
+
+'status_active' => 'نشط',
+'status_completed' => 'مكتمل',
+'status_cancelled' => 'ملغي',
+
+'save_goal' => 'حفظ الهدف',
+'back_to_goals' => 'العودة إلى الأهداف',
+
+'no_goals_found' => 'لا توجد أهداف حتى الآن',
+'no_goals_description' => 'ابدأ بإنشاء أول هدف مالي لك.',
+'add_first_goal' => 'إضافة أول هدف',
+
+'delete_goal_confirmation' => 'هل أنت متأكد من حذف هذا الهدف؟',
+
+'savings_history' => 'سجل الادخار',
+'no_savings_found' => 'لم تتم إضافة أي مبالغ ادخار لهذا الهدف بعد.',
 ];

@@ -18,4 +18,8 @@ class Saving extends Model
     {
         return $this->belongsTo(Goal::class);
     }
+    public function account()
+{
+    return $this->belongsTo(Account::class);
+}
 }

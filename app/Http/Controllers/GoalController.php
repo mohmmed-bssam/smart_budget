@@ -4,19 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Goal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GoalController extends Controller
 {
-
     public function index()
     {
-        $goals = Goal::where('user_id', auth()->id())
+        $goals = Goal::where('user_id', Auth::id())
             ->latest()
             ->paginate(10);
 
         return view('goals.index', compact('goals'));
     }
-
 
 
     public function create()
@@ -25,21 +24,20 @@ class GoalController extends Controller
     }
 
 
-
     public function store(Request $request)
     {
         $validated = $request->validate([
-
             'title' => 'required|string|max:255',
 
-            'target_amount' => 'required|numeric|min:0',
+            'target_amount' => 'required|numeric|min:0.01',
 
-            'deadline' => 'nullable|date',
+            'currency' => 'required|in:USD,EUR,ILS,JOD,GBP',
 
+            'deadline' => 'nullable|date|after_or_equal:today',
         ]);
 
 
-        $validated['user_id'] = auth()->id();
+        $validated['user_id'] = Auth::id();
 
         $validated['current_amount'] = 0;
 
@@ -49,14 +47,14 @@ class GoalController extends Controller
         Goal::create($validated);
 
 
-        flash()->success(__('messages.goal_created'));
+        flash()->success(
+            __('messages.goal_created')
+        );
 
 
         return redirect()
             ->route('goals.index');
     }
-
-
 
 
     public function show(Goal $goal)
@@ -64,10 +62,37 @@ class GoalController extends Controller
         $this->authorizeGoal($goal);
 
 
-        return view('goals.show', compact('goal'));
+        $goal->load('savings');
+
+
+        $savedAmount = $goal->savings->sum('amount');
+
+
+        $remaining = max(
+            $goal->target_amount - $savedAmount,
+            0
+        );
+
+
+        $percentage =
+            $goal->target_amount > 0
+                ? round(
+                    ($savedAmount / $goal->target_amount) * 100,
+                    2
+                )
+                : 0;
+
+
+        return view(
+            'goals.show',
+            compact(
+                'goal',
+                'savedAmount',
+                'remaining',
+                'percentage'
+            )
+        );
     }
-
-
 
 
     public function edit(Goal $goal)
@@ -75,44 +100,45 @@ class GoalController extends Controller
         $this->authorizeGoal($goal);
 
 
-        return view('goals.edit', compact('goal'));
+        return view(
+            'goals.edit',
+            compact('goal')
+        );
     }
 
 
-
-
-    public function update(Request $request, Goal $goal)
-    {
+    public function update(
+        Request $request,
+        Goal $goal
+    ) {
         $this->authorizeGoal($goal);
 
 
         $validated = $request->validate([
-
             'title' => 'required|string|max:255',
 
-            'target_amount' => 'required|numeric|min:0',
+            'target_amount' => 'required|numeric|min:0.01',
+
+            'currency' => 'required|in:USD,EUR,ILS,JOD,GBP',
 
             'deadline' => 'nullable|date',
 
-            'status' => 'required|string',
-
+            'status' =>
+                'required|in:active,completed,cancelled',
         ]);
-
 
 
         $goal->update($validated);
 
 
-
-        flash()->success(__('messages.goal_updated'));
-
+        flash()->success(
+            __('messages.goal_updated')
+        );
 
 
         return redirect()
             ->route('goals.index');
     }
-
-
 
 
     public function destroy(Goal $goal)
@@ -123,9 +149,9 @@ class GoalController extends Controller
         $goal->delete();
 
 
-
-        flash()->warning(__('messages.goal_deleted'));
-
+        flash()->warning(
+            __('messages.goal_deleted')
+        );
 
 
         return redirect()
@@ -133,12 +159,9 @@ class GoalController extends Controller
     }
 
 
-
-
-
     private function authorizeGoal(Goal $goal)
     {
-        if ($goal->user_id !== auth()->id()) {
+        if ($goal->user_id !== Auth::id()) {
             abort(403);
         }
     }
