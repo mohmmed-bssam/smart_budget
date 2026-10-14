@@ -1,40 +1,69 @@
 {{-- Notification Dropdown Component --}}
-<div class="relative" x-data="{
-    dropdownOpen: false,
-    notifying: true,
-    toggleDropdown() {
-        this.dropdownOpen = !this.dropdownOpen;
-        this.notifying = false;
-    },
-    closeDropdown() {
-        this.dropdownOpen = false;
-    },
-    handleItemClick() {
-        console.log('Notification item clicked');
-        this.closeDropdown();
-    },
-    handleViewAllClick() {
-        console.log('View All Notifications clicked');
-        this.closeDropdown();
-    }
-}" @click.away="closeDropdown()">
-    <!-- Notification Button -->
+
+<div
+    class="relative"
+    x-data="{
+        dropdownOpen: false,
+        notifying: true,
+
+        toggleDropdown() {
+            this.dropdownOpen = !this.dropdownOpen;
+            this.notifying = false;
+        },
+
+        closeDropdown() {
+            this.dropdownOpen = false;
+        },
+
+        handleItemClick() {
+            this.closeDropdown();
+        },
+
+        handleViewAllClick() {
+            this.closeDropdown();
+        }
+    }"
+    @click.away="closeDropdown()"
+>
+
+    {{-- Notification Button --}}
     <button
-        class="relative flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-full hover:text-dark-900 h-11 w-11 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+        class="relative flex h-11 w-11 items-center justify-center
+               rounded-full border
+               border-[#E8DDCF]
+               bg-[#FFFDF9]
+               text-[#8A7A68]
+               transition-colors
+               hover:bg-[#F3E8D8]
+               hover:text-[#6B4A2D]
+
+               dark:border-[#463429]
+               dark:bg-[#241B16]
+               dark:text-[#C4B3A1]
+               dark:hover:bg-[#30231B]
+               dark:hover:text-[#D8B77A]"
+
         @click="toggleDropdown()"
         type="button"
+        aria-label="{{ __('messages.notifications') }}"
     >
-        <!-- Notification Badge -->
+
+        {{-- Notification Badge --}}
         <span
             x-show="notifying"
-            class="absolute right-0 top-0.5 z-1 h-2 w-2 rounded-full bg-orange-400"
+            class="absolute top-0.5 z-1 h-2 w-2
+                   rounded-full bg-orange-400
+                   ltr:right-0 rtl:left-0"
         >
             <span
-                class="absolute inline-flex w-full h-full bg-orange-400 rounded-full opacity-75 -z-1 animate-ping"
+                class="absolute inline-flex h-full w-full
+                       animate-ping rounded-full
+                       bg-orange-400 opacity-75 -z-1"
             ></span>
         </span>
 
-        <!-- Bell Icon -->
+
+        {{-- Bell Icon --}}
         <svg
             class="fill-current"
             width="20"
@@ -50,25 +79,73 @@
                 fill=""
             />
         </svg>
+
     </button>
 
-    <!-- Dropdown Start -->
+
+    {{-- Dropdown --}}
     <div
         x-show="dropdownOpen"
+
         x-transition:enter="transition ease-out duration-100"
         x-transition:enter-start="transform opacity-0 scale-95"
         x-transition:enter-end="transform opacity-100 scale-100"
+
         x-transition:leave="transition ease-in duration-75"
         x-transition:leave-start="transform opacity-100 scale-100"
         x-transition:leave-end="transform opacity-0 scale-95"
-        class="absolute -right-[240px] mt-[17px] flex h-[480px] w-[350px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark sm:w-[361px] lg:right-0"
+
+        class="absolute z-50 mt-[17px]
+               flex h-[480px]
+               w-[350px]
+               max-w-[calc(100vw-2rem)]
+               flex-col
+               overflow-hidden
+               rounded-2xl
+               border
+               border-[#E8DDCF]
+               bg-[#FFFDF9]
+               p-3
+               shadow-theme-lg
+
+               ltr:right-0
+               rtl:left-0
+
+               dark:border-[#463429]
+               dark:bg-[#241B16]
+
+               sm:w-[361px]"
+
         style="display: none;"
     >
-        <!-- Dropdown Header -->
-        <div class="flex items-center justify-between pb-3 mb-3 border-b border-gray-100 dark:border-gray-800">
-            <h5 class="text-lg font-semibold text-gray-800 dark:text-white/90">Notification</h5>
 
-            <button @click="closeDropdown()" class="text-gray-500 dark:text-gray-400" type="button">
+        {{-- Dropdown Header --}}
+        <div
+            class="mb-3 flex items-center justify-between
+                   border-b border-[#EEE2D5] pb-3
+                   dark:border-[#463429]"
+        >
+
+            <h5
+                class="text-lg font-semibold
+                       text-[#2B2118]
+                       dark:text-[#F7F1E8]"
+            >
+                {{ __('messages.notifications') }}
+            </h5>
+
+
+            <button
+                @click="closeDropdown()"
+                type="button"
+                class="text-[#8A7A68]
+                       transition-colors
+                       hover:text-[#6B4A2D]
+
+                       dark:text-[#C4B3A1]
+                       dark:hover:text-[#D8B77A]"
+            >
+
                 <svg
                     class="fill-current"
                     width="24"
@@ -84,139 +161,252 @@
                         fill=""
                     />
                 </svg>
+
             </button>
+
         </div>
 
-        <!-- Notification List -->
-        <ul class="flex flex-col h-auto overflow-y-auto custom-scrollbar">
-            @php
-                $notifications = [
-                    [
-                        'id' => 1,
-                        'userName' => 'Terry Franci',
-                        'userImage' => '/images/user/user-02.jpg',
-                        'action' => 'requests permission to change',
-                        'project' => 'Project - Nganter App',
-                        'type' => 'Project',
-                        'time' => '5 min ago',
-                        'status' => 'online',
-                    ],
-                    [
-                        'id' => 2,
-                        'userName' => 'Alex Johnson',
-                        'userImage' => '/images/user/user-03.jpg',
-                        'action' => 'requests permission to change',
-                        'project' => 'Project - Nganter App',
-                        'type' => 'Project',
-                        'time' => '10 min ago',
-                        'status' => 'offline',
-                    ],
-                    [
-                        'id' => 3,
-                        'userName' => 'Sarah Williams',
-                        'userImage' => '/images/user/user-04.jpg',
-                        'action' => 'requests permission to change',
-                        'project' => 'Project - Dashboard UI',
-                        'type' => 'Project',
-                        'time' => '15 min ago',
-                        'status' => 'online',
-                    ],
-                    [
-                        'id' => 4,
-                        'userName' => 'Mike Brown',
-                        'userImage' => '/images/user/user-05.jpg',
-                        'action' => 'requests permission to change',
-                        'project' => 'Project - E-commerce',
-                        'type' => 'Project',
-                        'time' => '20 min ago',
-                        'status' => 'online',
-                    ],
-                    [
-                        'id' => 5,
-                        'userName' => 'Emma Davis',
-                        'userImage' => '/images/user/user-06.jpg',
-                        'action' => 'requests permission to change',
-                        'project' => 'Project - Mobile App',
-                        'type' => 'Project',
-                        'time' => '25 min ago',
-                        'status' => 'offline',
-                    ],
-                    [
-                        'id' => 6,
-                        'userName' => 'John Smith',
-                        'userImage' => '/images/user/user-07.jpg',
-                        'action' => 'requests permission to change',
-                        'project' => 'Project - Landing Page',
-                        'type' => 'Project',
-                        'time' => '30 min ago',
-                        'status' => 'online',
-                    ],
-                    [
-                        'id' => 7,
-                        'userName' => 'Lisa Anderson',
-                        'userImage' => '/images/user/user-08.jpg',
-                        'action' => 'requests permission to change',
-                        'project' => 'Project - Blog System',
-                        'type' => 'Project',
-                        'time' => '35 min ago',
-                        'status' => 'online',
-                    ],
-                    [
-                        'id' => 8,
-                        'userName' => 'David Wilson',
-                        'userImage' => '/images/user/user-09.jpg',
-                        'action' => 'requests permission to change',
-                        'project' => 'Project - CRM Dashboard',
-                        'type' => 'Project',
-                        'time' => '40 min ago',
-                        'status' => 'online',
-                    ],
-                ];
-            @endphp
+
+        {{-- Demo Notifications --}}
+        @php
+            $notifications = [
+                [
+                    'id' => 1,
+                    'userName' => 'Terry Franci',
+                    'userImage' => '/images/user/user-02.jpg',
+                    'action' => 'requests permission to change',
+                    'project' => 'Project - Nganter App',
+                    'type' => 'Project',
+                    'time' => '5 min ago',
+                    'status' => 'online',
+                ],
+                [
+                    'id' => 2,
+                    'userName' => 'Alex Johnson',
+                    'userImage' => '/images/user/user-03.jpg',
+                    'action' => 'requests permission to change',
+                    'project' => 'Project - Nganter App',
+                    'type' => 'Project',
+                    'time' => '10 min ago',
+                    'status' => 'offline',
+                ],
+                [
+                    'id' => 3,
+                    'userName' => 'Sarah Williams',
+                    'userImage' => '/images/user/user-04.jpg',
+                    'action' => 'requests permission to change',
+                    'project' => 'Project - Dashboard UI',
+                    'type' => 'Project',
+                    'time' => '15 min ago',
+                    'status' => 'online',
+                ],
+                [
+                    'id' => 4,
+                    'userName' => 'Mike Brown',
+                    'userImage' => '/images/user/user-05.jpg',
+                    'action' => 'requests permission to change',
+                    'project' => 'Project - E-commerce',
+                    'type' => 'Project',
+                    'time' => '20 min ago',
+                    'status' => 'online',
+                ],
+                [
+                    'id' => 5,
+                    'userName' => 'Emma Davis',
+                    'userImage' => '/images/user/user-06.jpg',
+                    'action' => 'requests permission to change',
+                    'project' => 'Project - Mobile App',
+                    'type' => 'Project',
+                    'time' => '25 min ago',
+                    'status' => 'offline',
+                ],
+                [
+                    'id' => 6,
+                    'userName' => 'John Smith',
+                    'userImage' => '/images/user/user-07.jpg',
+                    'action' => 'requests permission to change',
+                    'project' => 'Project - Landing Page',
+                    'type' => 'Project',
+                    'time' => '30 min ago',
+                    'status' => 'online',
+                ],
+                [
+                    'id' => 7,
+                    'userName' => 'Lisa Anderson',
+                    'userImage' => '/images/user/user-08.jpg',
+                    'action' => 'requests permission to change',
+                    'project' => 'Project - Blog System',
+                    'type' => 'Project',
+                    'time' => '35 min ago',
+                    'status' => 'online',
+                ],
+                [
+                    'id' => 8,
+                    'userName' => 'David Wilson',
+                    'userImage' => '/images/user/user-09.jpg',
+                    'action' => 'requests permission to change',
+                    'project' => 'Project - CRM Dashboard',
+                    'type' => 'Project',
+                    'time' => '40 min ago',
+                    'status' => 'online',
+                ],
+            ];
+        @endphp
+
+
+        {{-- Notification List --}}
+        <ul
+            class="custom-scrollbar
+                   flex min-h-0 flex-1 flex-col
+                   overflow-y-auto overflow-x-hidden"
+        >
 
             @foreach ($notifications as $notification)
+
                 <li @click="handleItemClick()">
+
                     <a
-                        class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
                         href="#"
+                        class="flex gap-3
+                               rounded-lg
+                               border-b border-[#EEE2D5]
+                               px-4 py-3
+                               transition-colors
+
+                               hover:bg-[#F3E8D8]
+
+                               dark:border-[#463429]
+                               dark:hover:bg-[#30231B]"
                     >
-                        <span class="relative block w-full h-10 rounded-full z-1 max-w-10">
-                            <img src="{{ $notification['userImage'] }}" alt="User" class="overflow-hidden rounded-full" />
+
+                        {{-- Avatar --}}
+                        <span
+                            class="relative z-1 block
+                                   h-10 w-10
+                                   shrink-0 rounded-full"
+                        >
+
+                            <img
+                                src="{{ $notification['userImage'] }}"
+                                alt="User"
+                                class="h-10 w-10
+                                       rounded-full
+                                       object-cover"
+                            />
+
                             <span
-                                class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900 {{ $notification['status'] === 'online' ? 'bg-success-500' : 'bg-error-500' }}"
+                                class="absolute bottom-0
+                                       h-2.5 w-2.5
+                                       rounded-full
+                                       border-[1.5px]
+                                       border-[#FFFDF9]
+
+                                       ltr:right-0
+                                       rtl:left-0
+
+                                       dark:border-[#241B16]
+
+                                       {{ $notification['status'] === 'online'
+                                            ? 'bg-[#4F7A5A] dark:bg-[#7EAA89]'
+                                            : 'bg-[#B85C5C] dark:bg-[#DF7E7E]' }}"
                             ></span>
+
                         </span>
 
-                        <span class="block">
-                            <span class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400">
-                                <span class="font-medium text-gray-800 dark:text-white/90">
+
+                        {{-- Content --}}
+                        <span class="block min-w-0">
+
+                            <span
+                                class="mb-1.5 block
+                                       break-words
+                                       text-theme-sm
+                                       text-[#8A7A68]
+                                       dark:text-[#C4B3A1]"
+                            >
+
+                                <span
+                                    class="font-medium
+                                           text-[#2B2118]
+                                           dark:text-[#F7F1E8]"
+                                >
                                     {{ $notification['userName'] }}
                                 </span>
+
                                 {{ $notification['action'] }}
-                                <span class="font-medium text-gray-800 dark:text-white/90">
+
+                                <span
+                                    class="font-medium
+                                           text-[#2B2118]
+                                           dark:text-[#F7F1E8]"
+                                >
                                     {{ $notification['project'] }}
                                 </span>
+
                             </span>
 
-                            <span class="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400">
-                                <span>{{ $notification['type'] }}</span>
-                                <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
-                                <span>{{ $notification['time'] }}</span>
+
+                            <span
+                                class="flex flex-wrap items-center gap-2
+                                       text-theme-xs
+                                       text-[#8A7A68]
+                                       dark:text-[#C4B3A1]"
+                            >
+
+                                <span>
+                                    {{ $notification['type'] }}
+                                </span>
+
+                                <span
+                                    class="h-1 w-1
+                                           rounded-full
+                                           bg-[#B9AA99]
+                                           dark:bg-[#8A7A68]"
+                                ></span>
+
+                                <span>
+                                    {{ $notification['time'] }}
+                                </span>
+
                             </span>
+
                         </span>
+
                     </a>
+
                 </li>
+
             @endforeach
+
         </ul>
 
-        <!-- View All Button -->
+
+        {{-- View All --}}
         <a
             href="#"
-            class="mt-3 flex justify-center rounded-lg border border-gray-300 bg-white p-3 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
             @click.prevent="handleViewAllClick()"
+
+            class="mt-3 flex shrink-0 justify-center
+                   rounded-lg
+                   border border-[#D8CEC2]
+                   bg-[#FFFDF9]
+                   p-3
+                   text-theme-sm
+                   font-medium
+                   text-[#6B4A2D]
+                   shadow-theme-xs
+                   transition-colors
+
+                   hover:bg-[#F3E8D8]
+
+                   dark:border-[#594236]
+                   dark:bg-[#30231B]
+                   dark:text-[#D8B77A]
+                   dark:hover:bg-[#3A2A20]"
         >
-            View All Notification
+            {{ __('messages.view_all_notifications') }}
         </a>
+
     </div>
-    <!-- Dropdown End -->
+
 </div>

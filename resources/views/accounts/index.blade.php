@@ -16,15 +16,43 @@
                 {{ __('messages.accounts_description') }}
             </p>
         </div>
+<div class="flex flex-wrap items-center gap-3">
 
-        <a
-            href="{{ route('accounts.create') }}"
-            class="inline-flex items-center justify-center rounded-lg bg-brand-500
-                   px-4 py-2.5 text-sm font-medium text-white
-                   hover:bg-brand-600"
-        >
-            {{ __('messages.add_account') }}
-        </a>
+    <a
+        href="{{ route('accounts.create') }}"
+        class="inline-flex items-center justify-center rounded-xl
+               px-4 py-2.5 text-sm font-medium text-white"
+        style="background: linear-gradient(135deg, #5E4029, #8A6238);"
+    >
+        <i class="fa-solid fa-plus me-2"></i>
+
+        {{ __('messages.add_account') }}
+    </a>
+
+
+    <a
+        href="{{ route('transfers.create') }}"
+        class="inline-flex items-center justify-center rounded-xl
+               border border-[#D8CEC2]
+               bg-[#FFFDF9]
+               px-4 py-2.5
+               text-sm font-medium
+               text-[#6B4A2D]
+               transition
+               hover:bg-[#F3E8D8]
+
+               dark:border-[#594236]
+               dark:bg-[#241B16]
+               dark:text-[#D8B77A]
+               dark:hover:bg-[#30231B]"
+    >
+        <i class="fa-solid fa-right-left me-2"></i>
+
+        {{ __('messages.transfer') }}
+    </a>
+
+</div>
+        
 
     </div>
 

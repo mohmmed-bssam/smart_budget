@@ -12,6 +12,7 @@ use App\Http\Controllers\DashboardController as ControllersDashboardController;
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\TransferController;
 use App\Services\CurrencyService;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -71,6 +72,8 @@ Route::prefix(LaravelLocalization::setLocale())
                 Route::resource('budgets', BudgetController::class);
                 Route::resource('goals', GoalController::class);
                 Route::resource('savings', SavingController::class);
+                Route::resource('transfers', TransferController::class)
+                     ->only(['index','create','store','show','destroy', ]);
                 /*
                 |--------------------------------------------------------------------------
                 | Profile

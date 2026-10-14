@@ -342,6 +342,28 @@
                         </a>
 
                     </li>
+                                        {{-- Transfers --}}
+
+                    <li>
+                        <a href="{{ route('transfers.index') }}"
+                            class="menu-item group
+            {{ request()->routeIs('transfers.*') }}
+                ? 'menu-item-active'
+                : 'menu-item-inactive' }}">
+                            <span
+                                class="{{ request()->routeIs('transfers.*') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}">
+                                <i class="fa-solid fa-right-left text-lg"></i>
+                            </span>
+
+                            <span
+                                x-show="$store.sidebar.isExpanded
+                || $store.sidebar.isHovered
+                || $store.sidebar.isMobileOpen"
+                                class="menu-item-text">
+                                {{ __('messages.transfers') }}
+                            </span>
+                        </a>
+                    </li>
 
 
 
