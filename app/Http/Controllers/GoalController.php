@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use App\Models\Goal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -57,42 +58,54 @@ class GoalController extends Controller
     }
 
 
-    public function show(Goal $goal)
-    {
-        $this->authorizeGoal($goal);
+  public function show(Goal $goal)
+{
+    $this->authorizeGoal($goal);
 
 
-        $goal->load('savings');
+    $goal->load([
+        'savings.account'
+    ]);
 
 
-        $savedAmount = $goal->savings->sum('amount');
+    $accounts = Account::where(
+        'user_id',
+        auth()->id()
+    )
+        ->orderBy('created_at')
+        ->get();
 
 
-        $remaining = max(
-            $goal->target_amount - $savedAmount,
-            0
-        );
+    $savedAmount =
+        $goal->savings->sum('amount');
 
 
-        $percentage =
-            $goal->target_amount > 0
-                ? round(
-                    ($savedAmount / $goal->target_amount) * 100,
-                    2
-                )
-                : 0;
+    $remaining = max(
+        $goal->target_amount - $savedAmount,
+        0
+    );
 
 
-        return view(
-            'goals.show',
-            compact(
-                'goal',
-                'savedAmount',
-                'remaining',
-                'percentage'
+    $percentage =
+        $goal->target_amount > 0
+            ? round(
+                ($savedAmount / $goal->target_amount) * 100,
+                2
             )
-        );
-    }
+            : 0;
+
+
+    return view(
+        'goals.show',
+        compact(
+            'goal',
+            'accounts',
+            'savedAmount',
+            'remaining',
+            'percentage'
+        )
+    );
+}
 
 
     public function edit(Goal $goal)

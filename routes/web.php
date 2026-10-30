@@ -71,9 +71,19 @@ Route::prefix(LaravelLocalization::setLocale())
                 Route::resource('transactions', TransactionController::class);
                 Route::resource('budgets', BudgetController::class);
                 Route::resource('goals', GoalController::class);
-                Route::resource('savings', SavingController::class);
                 Route::resource('transfers', TransferController::class)
                      ->only(['index','create','store','show','destroy', ]);
+                     Route::post(
+    '/goals/{goal}/savings',
+    [SavingController::class, 'store']
+)->name('goals.savings.store');
+
+
+Route::delete(
+    '/savings/{saving}',
+    [SavingController::class, 'destroy']
+)->name('savings.destroy');
+
                 /*
                 |--------------------------------------------------------------------------
                 | Profile
