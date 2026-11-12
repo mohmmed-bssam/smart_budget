@@ -45,120 +45,317 @@ class TransactionController extends Controller
     }
 
 
-public function store(Request $request, CurrencyService $currencyService)
-{
+public function store(
+    Request $request,
+    CurrencyService $currencyService
+) {
     $validated = $request->validate([
-        'account_id' => 'required|exists:accounts,id',
-        'category_id' => 'required|exists:categories,id',
+        'account_id' => [
+            'required',
+            Rule::exists('accounts', 'id')
+                ->where('user_id', auth()->id()),
+        ],
+
+        'category_id' => [
+            'required',
+            Rule::exists('categories', 'id')
+                ->where(function ($query) {
+                    $query->where('user_id', auth()->id())
+                        ->orWhereNull('user_id');
+                }),
+        ],
+
         'type' => 'required|in:income,expense',
+
         'amount' => 'required|numeric|min:0.01',
+
+        'currency' => 'required|in:USD,EUR,ILS,JOD,GBP',
+
         'title' => 'required|string|max:255',
+
         'description' => 'nullable|string',
+
         'transaction_date' => 'required|date',
     ]);
 
-    // الحساب لازم يكون للمستخدم الحالي
-    $account = Account::where('id', $validated['account_id'])
-        ->where('user_id', auth()->id())
+
+    $account = Account::where(
+        'id',
+        $validated['account_id']
+    )
+        ->where(
+            'user_id',
+            auth()->id()
+        )
         ->firstOrFail();
 
-    // التصنيف
-    $category = Category::where('id', $validated['category_id'])
+
+    $category = Category::where(
+        'id',
+        $validated['category_id']
+    )
         ->where(function ($query) {
-            $query->where('user_id', auth()->id())
-                ->orWhereNull('user_id');
+            $query->where(
+                'user_id',
+                auth()->id()
+            )
+                ->orWhereNull(
+                    'user_id'
+                );
         })
         ->firstOrFail();
 
-    // نتأكد أن نوع التصنيف يطابق نوع العملية
-    if ($category->type !== $validated['type']) {
+
+    if (
+        $category->type
+        !==
+        $validated['type']
+    ) {
         return back()
             ->withErrors([
-                'category_id' => __('messages.category_type_mismatch'),
+                'category_id' =>
+                    __('messages.category_type_mismatch'),
             ])
             ->withInput();
     }
 
-    /*
-     * عملة العملية هي عملة الحساب نفسه.
-     * مثال: الحساب ILS → العملية ILS
-     */
-    $currency = $account->currency;
 
     /*
-     * العملة الأساسية للتقارير.
-     * إذا عندك currency للمستخدم استخدمها،
-     * وإلا نأخذ العملة الافتراضية من Settings.
-     */
+    |--------------------------------------------------------------------------
+    | Account Amount
+    |--------------------------------------------------------------------------
+    |
+    | amount = المبلغ الذي أدخله المستخدم
+    | account_amount = المبلغ الذي يدخل/يخرج من الحساب
+    |
+    */
+
+    try {
+
+        if (
+            $validated['currency']
+            ===
+            $account->currency
+        ) {
+            $accountAmount =
+                (float) $validated['amount'];
+
+        } else {
+
+            $accountRate =
+                $currencyService->getRate(
+                    $validated['currency'],
+                    $account->currency
+                );
+
+            $accountAmount = round(
+                (float) $validated['amount']
+                * $accountRate,
+                2
+            );
+        }
+
+    } catch (\Throwable $e) {
+
+        return back()
+            ->withErrors([
+                'currency' =>
+                    __('messages.currency_service_unavailable'),
+            ])
+            ->withInput();
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Base Currency
+    |--------------------------------------------------------------------------
+    */
+
     $baseCurrency =
         auth()->user()->currency
-        ?? Setting::where('key', 'default_currency')->value('value')
+        ?? Setting::where(
+            'key',
+            'default_currency'
+        )->value('value')
         ?? 'USD';
 
-    // إذا نفس العملة ما في داعي API
-    if ($currency === $baseCurrency) {
 
-        $exchangeRate = 1;
-        $baseAmount = $validated['amount'];
+    /*
+    |--------------------------------------------------------------------------
+    | Base Amount
+    |--------------------------------------------------------------------------
+    */
 
-    } else {
+    try {
 
-        $exchangeRate = $currencyService->getRate(
-            $currency,
+        if (
+            $validated['currency']
+            ===
             $baseCurrency
-        );
+        ) {
+            $exchangeRate = 1;
 
-        $baseAmount = $validated['amount'] * $exchangeRate;
+            $baseAmount =
+                (float) $validated['amount'];
+
+        } elseif (
+            $account->currency
+            ===
+            $baseCurrency
+        ) {
+
+            $baseAmount =
+                $accountAmount;
+
+            $exchangeRate =
+                $baseAmount
+                / (float) $validated['amount'];
+
+        } else {
+
+            $exchangeRate =
+                $currencyService->getRate(
+                    $validated['currency'],
+                    $baseCurrency
+                );
+
+            $baseAmount = round(
+                (float) $validated['amount']
+                * $exchangeRate,
+                2
+            );
+        }
+
+    } catch (\Throwable $e) {
+
+        return back()
+            ->withErrors([
+                'currency' =>
+                    __('messages.currency_service_unavailable'),
+            ])
+            ->withInput();
     }
+
 
     DB::transaction(function () use (
         $validated,
         $account,
-        $currency,
-        $baseCurrency,
+        $accountAmount,
         $exchangeRate,
+        $baseCurrency,
         $baseAmount
     ) {
 
+        $lockedAccount =
+            Account::where(
+                'id',
+                $account->id
+            )
+                ->where(
+                    'user_id',
+                    auth()->id()
+                )
+                ->lockForUpdate()
+                ->firstOrFail();
+
+
+        if (
+            $validated['type'] === 'expense'
+            &&
+            (float) $lockedAccount->balance
+            < $accountAmount
+        ) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'amount' =>
+                    __('messages.insufficient_account_balance'),
+            ]);
+        }
+
+
         Transaction::create([
-            'user_id' => auth()->id(),
+            'user_id' =>
+                auth()->id(),
 
-            'account_id' => $validated['account_id'],
-            'category_id' => $validated['category_id'],
+            'account_id' =>
+                $lockedAccount->id,
 
-            'type' => $validated['type'],
-            'amount' => $validated['amount'],
+            'category_id' =>
+                $validated['category_id'],
 
-            'currency' => $currency,
-            'exchange_rate' => $exchangeRate,
-            'base_currency' => $baseCurrency,
-            'base_amount' => $baseAmount,
+            'type' =>
+                $validated['type'],
 
-            'title' => $validated['title'],
-            'description' => $validated['description'] ?? null,
-            'transaction_date' => $validated['transaction_date'],
+            /*
+             * المبلغ كما أدخله المستخدم
+             */
+            'amount' =>
+                $validated['amount'],
+
+            'currency' =>
+                $validated['currency'],
+
+            /*
+             * المبلغ الفعلي على الحساب
+             */
+            'account_amount' =>
+                $accountAmount,
+
+            'account_currency' =>
+                $lockedAccount->currency,
+
+            /*
+             * التقارير
+             */
+            'exchange_rate' =>
+                $exchangeRate,
+
+            'base_currency' =>
+                $baseCurrency,
+
+            'base_amount' =>
+                $baseAmount,
+
+            'title' =>
+                $validated['title'],
+
+            'description' =>
+                $validated['description']
+                ?? null,
+
+            'transaction_date' =>
+                $validated['transaction_date'],
         ]);
 
-        // تحديث رصيد الحساب
-        if ($validated['type'] === 'income') {
 
-            $account->increment(
+        if (
+            $validated['type']
+            === 'income'
+        ) {
+            $lockedAccount->increment(
                 'balance',
-                $validated['amount']
+                $accountAmount
             );
 
         } else {
 
-            $account->decrement(
+            $lockedAccount->decrement(
                 'balance',
-                $validated['amount']
+                $accountAmount
             );
         }
     });
 
-    flash()->success(__('messages.transaction_created'));
 
-    return redirect()->route('transactions.index');
+    flash()->success(
+        __('messages.transaction_created')
+    );
+
+
+    return redirect()
+        ->route(
+            'transactions.index'
+        );
 }
 
 
@@ -204,168 +401,638 @@ public function update(
     Transaction $transaction,
     CurrencyService $currencyService
 ) {
-    $this->authorizeTransaction($transaction);
+    $this->authorizeTransaction(
+        $transaction
+    );
+
 
     $validated = $request->validate([
         'account_id' => [
             'required',
-            Rule::exists('accounts', 'id')
-                ->where('user_id', auth()->id()),
+
+            Rule::exists(
+                'accounts',
+                'id'
+            )->where(
+                'user_id',
+                auth()->id()
+            ),
         ],
 
         'category_id' => [
             'required',
-            Rule::exists('categories', 'id')
-                ->where(function ($query) {
-                    $query->where('user_id', auth()->id())
-                        ->orWhereNull('user_id');
-                }),
+
+            Rule::exists(
+                'categories',
+                'id'
+            )->where(function ($query) {
+
+                $query
+                    ->where(
+                        'user_id',
+                        auth()->id()
+                    )
+                    ->orWhereNull(
+                        'user_id'
+                    );
+            }),
         ],
 
-        'type' => 'required|in:income,expense',
+        'type' =>
+            'required|in:income,expense',
 
-        'amount' => 'required|numeric|min:0.01',
+        'amount' =>
+            'required|numeric|min:0.01',
 
-        'title' => 'required|string|max:255',
+        'currency' =>
+            'required|in:USD,EUR,ILS,JOD,GBP',
 
-        'description' => 'nullable|string',
+        'title' =>
+            'required|string|max:255',
 
-        'transaction_date' => 'required|date',
+        'description' =>
+            'nullable|string',
+
+        'transaction_date' =>
+            'required|date',
     ]);
 
-    $category = Category::findOrFail($validated['category_id']);
 
-    if ($category->type !== $validated['type']) {
+    $category = Category::where(
+        'id',
+        $validated['category_id']
+    )
+        ->where(function ($query) {
+
+            $query
+                ->where(
+                    'user_id',
+                    auth()->id()
+                )
+                ->orWhereNull(
+                    'user_id'
+                );
+        })
+        ->firstOrFail();
+
+
+    if (
+        $category->type
+        !==
+        $validated['type']
+    ) {
         return back()
             ->withErrors([
-                'category_id' => __('messages.category_type_mismatch')
+                'category_id' =>
+                    __('messages.category_type_mismatch'),
             ])
             ->withInput();
     }
 
-    // الحساب الجديد المختار
-    $newAccount = Account::where('id', $validated['account_id'])
-        ->where('user_id', auth()->id())
+
+    $newAccount = Account::where(
+        'id',
+        $validated['account_id']
+    )
+        ->where(
+            'user_id',
+            auth()->id()
+        )
         ->firstOrFail();
 
-    // عملة العملية = عملة الحساب
-    $currency = $newAccount->currency;
 
-    // العملة الأساسية للتقارير
+    /*
+    |--------------------------------------------------------------------------
+    | Account Amount
+    |--------------------------------------------------------------------------
+    */
+
+    try {
+
+        if (
+            $validated['currency']
+            ===
+            $newAccount->currency
+        ) {
+            $accountAmount =
+                (float) $validated['amount'];
+
+        } else {
+
+            $accountRate =
+                $currencyService->getRate(
+                    $validated['currency'],
+                    $newAccount->currency
+                );
+
+            $accountAmount = round(
+                (float) $validated['amount']
+                * $accountRate,
+                2
+            );
+        }
+
+    } catch (\Throwable $e) {
+
+        return back()
+            ->withErrors([
+                'currency' =>
+                    __('messages.currency_service_unavailable'),
+            ])
+            ->withInput();
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Base Currency
+    |--------------------------------------------------------------------------
+    */
+
     $baseCurrency =
         auth()->user()->currency
-        ?? Setting::where('key', 'default_currency')->value('value')
+        ?? Setting::where(
+            'key',
+            'default_currency'
+        )->value('value')
         ?? 'USD';
 
-    if ($currency === $baseCurrency) {
-        $exchangeRate = 1;
-        $baseAmount = $validated['amount'];
-    } else {
-        $exchangeRate = $currencyService->getRate(
-            $currency,
-            $baseCurrency
-        );
 
-        $baseAmount = $validated['amount'] * $exchangeRate;
+    /*
+    |--------------------------------------------------------------------------
+    | Base Amount
+    |--------------------------------------------------------------------------
+    */
+
+    try {
+
+        if (
+            $validated['currency']
+            ===
+            $baseCurrency
+        ) {
+            $exchangeRate = 1;
+
+            $baseAmount =
+                (float) $validated['amount'];
+
+        } elseif (
+            $newAccount->currency
+            ===
+            $baseCurrency
+        ) {
+
+            $baseAmount =
+                $accountAmount;
+
+            $exchangeRate =
+                $baseAmount
+                / (float) $validated['amount'];
+
+        } else {
+
+            $exchangeRate =
+                $currencyService->getRate(
+                    $validated['currency'],
+                    $baseCurrency
+                );
+
+            $baseAmount = round(
+                (float) $validated['amount']
+                * $exchangeRate,
+                2
+            );
+        }
+
+    } catch (\Throwable $e) {
+
+        return back()
+            ->withErrors([
+                'currency' =>
+                    __('messages.currency_service_unavailable'),
+            ])
+            ->withInput();
     }
+
 
     DB::transaction(function () use (
         $transaction,
         $validated,
         $newAccount,
-        $currency,
+        $accountAmount,
         $exchangeRate,
         $baseCurrency,
         $baseAmount
     ) {
-        /*
-         * 1. نرجع تأثير العملية القديمة
-         */
-        $oldAccount = $transaction->account;
 
-        if ($transaction->type === 'income') {
-            // الدخل القديم كان زاد الرصيد، فنرجعه بالنقص
+        /*
+        |--------------------------------------------------------------------------
+        | Old Account
+        |--------------------------------------------------------------------------
+        */
+
+        $oldAccount =
+            Account::where(
+                'id',
+                $transaction->account_id
+            )
+                ->where(
+                    'user_id',
+                    auth()->id()
+                )
+                ->lockForUpdate()
+                ->firstOrFail();
+
+
+        /*
+         * العمليات القديمة ممكن account_amount يكون NULL.
+         */
+        $oldAccountAmount =
+            $transaction->account_amount
+            ?? $transaction->amount;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | 1. Undo Old Transaction
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            $transaction->type
+            === 'income'
+        ) {
             $oldAccount->decrement(
                 'balance',
-                $transaction->amount
+                $oldAccountAmount
             );
+
         } else {
-            // المصروف القديم كان نقص الرصيد، فنرجعه بالزيادة
+
             $oldAccount->increment(
                 'balance',
-                $transaction->amount
+                $oldAccountAmount
             );
         }
 
 
         /*
-         * 2. نحدّث العملية
-         */
+        |--------------------------------------------------------------------------
+        | 2. Lock New Account
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            $newAccount->id
+            ===
+            $oldAccount->id
+        ) {
+            $lockedNewAccount =
+                $oldAccount;
+
+        } else {
+
+            $lockedNewAccount =
+                Account::where(
+                    'id',
+                    $newAccount->id
+                )
+                    ->where(
+                        'user_id',
+                        auth()->id()
+                    )
+                    ->lockForUpdate()
+                    ->firstOrFail();
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | 3. Check Balance
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            $validated['type']
+            === 'expense'
+            &&
+            (float) $lockedNewAccount->balance
+            < $accountAmount
+        ) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'amount' =>
+                    __('messages.insufficient_account_balance'),
+            ]);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | 4. Update Transaction
+        |--------------------------------------------------------------------------
+        */
+
         $transaction->update([
-            'account_id' => $validated['account_id'],
-            'category_id' => $validated['category_id'],
+            'account_id' =>
+                $lockedNewAccount->id,
 
-            'type' => $validated['type'],
-            'amount' => $validated['amount'],
+            'category_id' =>
+                $validated['category_id'],
 
-            'currency' => $currency,
-            'exchange_rate' => $exchangeRate,
-            'base_currency' => $baseCurrency,
-            'base_amount' => $baseAmount,
+            'type' =>
+                $validated['type'],
 
-            'title' => $validated['title'],
-            'description' => $validated['description'] ?? null,
-            'transaction_date' => $validated['transaction_date'],
+            /*
+             * العملية الأصلية
+             */
+            'amount' =>
+                $validated['amount'],
+
+            'currency' =>
+                $validated['currency'],
+
+            /*
+             * ما تأثر به الحساب
+             */
+            'account_amount' =>
+                $accountAmount,
+
+            'account_currency' =>
+                $lockedNewAccount->currency,
+
+            /*
+             * التقارير
+             */
+            'exchange_rate' =>
+                $exchangeRate,
+
+            'base_currency' =>
+                $baseCurrency,
+
+            'base_amount' =>
+                $baseAmount,
+
+            'title' =>
+                $validated['title'],
+
+            'description' =>
+                $validated['description']
+                ?? null,
+
+            'transaction_date' =>
+                $validated['transaction_date'],
         ]);
 
 
         /*
-         * 3. نطبق تأثير العملية الجديدة
-         */
-        if ($validated['type'] === 'income') {
-            $newAccount->increment(
+        |--------------------------------------------------------------------------
+        | 5. Apply New Transaction
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            $validated['type']
+            === 'income'
+        ) {
+            $lockedNewAccount->increment(
                 'balance',
-                $validated['amount']
+                $accountAmount
             );
+
         } else {
-            $newAccount->decrement(
+
+            $lockedNewAccount->decrement(
                 'balance',
-                $validated['amount']
+                $accountAmount
             );
         }
     });
 
-    flash()->info(__('messages.transaction_updated'));
 
-    return redirect()->route('transactions.index');
+    flash()->info(
+        __('messages.transaction_updated')
+    );
+
+
+    return redirect()
+        ->route(
+            'transactions.index'
+        );
 }
 
 
-  public function destroy(Transaction $transaction)
-{
-    $this->authorizeTransaction($transaction);
+ public function destroy(
+    Transaction $transaction
+) {
+    $this->authorizeTransaction(
+        $transaction
+    );
 
-    $account = $transaction->account;
 
-    DB::transaction(function () use ($transaction, $account) {
+    DB::transaction(function () use (
+        $transaction
+    ) {
 
-        if ($transaction->type === 'income') {
-            $account->decrement('balance', $transaction->amount);
+        $account =
+            Account::where(
+                'id',
+                $transaction->account_id
+            )
+                ->where(
+                    'user_id',
+                    auth()->id()
+                )
+                ->lockForUpdate()
+                ->firstOrFail();
+
+
+        $accountAmount =
+            $transaction->account_amount
+            ?? $transaction->amount;
+
+
+        if (
+            $transaction->type
+            === 'income'
+        ) {
+            $account->decrement(
+                'balance',
+                $accountAmount
+            );
+
         } else {
-            $account->increment('balance', $transaction->amount);
+
+            $account->increment(
+                'balance',
+                $accountAmount
+            );
         }
+
 
         $transaction->delete();
     });
 
-    flash()->warning(__('messages.transaction_deleted'));
 
-    return redirect()->route('transactions.index');
+    flash()->warning(
+        __('messages.transaction_deleted')
+    );
+
+
+    return redirect()
+        ->route(
+            'transactions.index'
+        );
 }
 
 
 
+public function exchangePreview(
+    Request $request,
+    CurrencyService $currencyService
+) {
+    $validated = $request->validate([
+        'amount' => [
+            'required',
+            'numeric',
+            'min:0.01',
+        ],
 
+        'currency' => [
+            'required',
+            'in:USD,EUR,ILS,JOD,GBP',
+        ],
+
+        'account_id' => [
+            'required',
+
+            Rule::exists(
+                'accounts',
+                'id'
+            )->where(
+                'user_id',
+                auth()->id()
+            ),
+        ],
+    ]);
+
+
+    $account = Account::where(
+        'id',
+        $validated['account_id']
+    )
+        ->where(
+            'user_id',
+            auth()->id()
+        )
+        ->firstOrFail();
+
+
+    $fromCurrency =
+        $validated['currency'];
+
+    $toCurrency =
+        $account->currency;
+
+    $amount =
+        (float) $validated['amount'];
+
+
+    /*
+     * نفس العملة
+     */
+    if ($fromCurrency === $toCurrency) {
+
+        return response()->json([
+            'same_currency' => true,
+
+            'from_currency' =>
+                $fromCurrency,
+
+            'to_currency' =>
+                $toCurrency,
+
+            'amount' =>
+                $amount,
+
+            'converted_amount' =>
+                round($amount, 2),
+
+            'rate' =>
+                1,
+
+            'inverse_rate' =>
+                1,
+        ]);
+    }
+
+
+    try {
+
+        /*
+         * مثال:
+         * ILS → USD
+         */
+        $rate =
+            $currencyService->getRate(
+                $fromCurrency,
+                $toCurrency
+            );
+
+
+        $convertedAmount = round(
+            $amount * $rate,
+            2
+        );
+
+
+        /*
+         * مثال:
+         *
+         * إذا:
+         * 1 ILS = 0.314 USD
+         *
+         * العكسي:
+         * 1 USD = 3.18 ILS
+         */
+        $inverseRate =
+            $rate > 0
+                ? 1 / $rate
+                : null;
+
+
+        return response()->json([
+            'same_currency' => false,
+
+            'from_currency' =>
+                $fromCurrency,
+
+            'to_currency' =>
+                $toCurrency,
+
+            'amount' =>
+                $amount,
+
+            'converted_amount' =>
+                $convertedAmount,
+
+            'rate' =>
+                round($rate, 6),
+
+            'inverse_rate' =>
+                $inverseRate
+                    ? round($inverseRate, 6)
+                    : null,
+        ]);
+
+
+    } catch (\Throwable $e) {
+
+        return response()->json([
+            'message' =>
+                __('messages.currency_service_unavailable'),
+        ], 503);
+    }
+}
     private function authorizeTransaction(Transaction $transaction)
     {
         if ($transaction->user_id !== auth()->id()) {

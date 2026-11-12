@@ -394,8 +394,26 @@ return [
 
     'saving_exceeds_goal_remaining' =>
     'The saving amount exceeds the remaining amount needed for this goal.',
+'transaction_currency' => 'Transaction Currency',
 
+'account_currency' => 'Account Currency',
 
+'currency_conversion_hint' =>
+    'If the transaction currency is different, the amount will be converted automatically to the account currency:',
+'checking_exchange_rate' =>
+    'Checking the current exchange rate...',
+
+'estimated_account_amount' =>
+    'Estimated amount from account',
+
+'current_exchange_rate' =>
+    'Current exchange rate',
+
+'exchange_rate_notice' =>
+    'The exchange rate is an estimate. The available rate at the time of saving will be used.',
+
+'same_currency_no_conversion' =>
+    'The transaction currency matches the account currency, so no conversion is required.',
 'currency_service_unavailable' =>
     'Unable to retrieve the exchange rate right now. Please try again shortly.',
     'add_saving' =>
@@ -411,10 +429,58 @@ return [
     'Return Amount to Account',
     'add_saving_description' =>
     'Add money from one of your accounts toward this financial goal.',
-
+'account_amount' => 'From account',
 'saving_currency_conversion_notice' =>
     'The account currency is different from the goal currency. The amount will be converted using the current exchange rate:',
+// en
 
+'original_transaction' => 'Original transaction',
+
+'account_balance_movement' => 'Account balance movement',
+'transfer_out' =>
+    'Outgoing Transfer',
+
+'transfer_in' =>
+    'Incoming Transfer',
+
+'incoming_transfer' =>
+    'Incoming transfer to account',
+
+'outgoing_transfer' =>
+    'Outgoing transfer from account',
+
+'saving_for_goal' =>
+    'Saving for Goal',
+
+'saving_movement' =>
+    'Amount allocated to savings',
+// en
+
+'transfer_in_from' => 'Incoming transfer from',
+'transfer_out_to' => 'Outgoing transfer to',
+
+'from' => 'From',
+'to' => 'To',
+
+'quick_add_category' =>
+    'Quick Add Category',
+
+'quick_add_category_description' =>
+    'Add a new category without leaving the transaction page.',
+
+'select_transaction_type_first' =>
+    'Select the transaction type before adding a category.',
+
+'fill_required_fields' =>
+    'Please fill in all required fields.',
+
+'category_create_failed' =>
+    'Unable to create the category.',
+'exchange_rate' => 'Exchange rate',
+'no_account_movements' =>
+    'There are no financial movements on this account yet.',
+'no_account_transactions' =>
+    'There are no transactions on this account yet.',
 'maximum_saving' =>
     'Maximum amount you can add',
 

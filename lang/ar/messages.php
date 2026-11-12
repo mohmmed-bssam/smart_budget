@@ -394,7 +394,74 @@ return [
 
    'currency_service_unavailable' =>
     'تعذر الحصول على سعر الصرف حاليًا. حاول مرة أخرى بعد قليل.',
+'transaction_currency' => 'عملة العملية',
 
+'account_currency' => 'عملة الحساب',
+
+'currency_conversion_hint' =>
+    'إذا كانت عملة العملية مختلفة، سيتم تحويل المبلغ تلقائيًا إلى عملة الحساب:',
+'checking_exchange_rate' =>
+    'جارٍ الحصول على سعر الصرف الحالي...',
+
+'estimated_account_amount' =>
+    'المبلغ المتوقع خصمه من الحساب',
+
+'current_exchange_rate' =>
+    'سعر الصرف الحالي',
+
+'exchange_rate_notice' =>
+    'سعر الصرف تقديري، وسيتم اعتماد السعر المتاح عند حفظ العملية.',
+'account_amount' => 'من الحساب',
+// ar
+
+'original_transaction' => 'قيمة العملية الأصلية',
+
+'account_balance_movement' => 'حركة على رصيد الحساب',
+
+'no_account_transactions' =>
+    'لا توجد عمليات مالية على هذا الحساب حتى الآن.',
+    'transfer_out' =>
+    'تحويل صادر',
+
+'transfer_in' =>
+    'تحويل وارد',
+
+'incoming_transfer' =>
+    'تحويل وارد إلى الحساب',
+
+'outgoing_transfer' =>
+    'تحويل صادر من الحساب',
+
+'saving_for_goal' =>
+    'ادخار للهدف',
+
+'saving_movement' =>
+    'مبلغ مخصص للادخار',
+
+'transfer_in_from' => 'تحويل وارد من',
+'transfer_out_to' => 'تحويل صادر إلى',
+
+'from' => 'من',
+'to' => 'إلى',
+'quick_add_category' =>
+    'إضافة تصنيف سريع',
+
+'quick_add_category_description' =>
+    'أضف تصنيفًا جديدًا بدون مغادرة صفحة العملية.',
+
+'select_transaction_type_first' =>
+    'اختر نوع العملية أولًا قبل إضافة التصنيف.',
+
+'fill_required_fields' =>
+    'يرجى تعبئة جميع الحقول المطلوبة.',
+
+'category_create_failed' =>
+    'تعذر إنشاء التصنيف.',
+'exchange_rate' => 'سعر الصرف',
+'no_account_movements' =>
+    'لا توجد حركات مالية على هذا الحساب حتى الآن.',
+'same_currency_no_conversion' =>
+    'عملة العملية مطابقة لعملة الحساب، لذلك لا يلزم تحويل.',
     'add_saving' =>
     'إضافة ادخار',
 

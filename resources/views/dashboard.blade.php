@@ -145,7 +145,16 @@
             </p>
 
             <h3 class="mt-3 text-2xl font-bold text-[#4F7A5A] dark:text-[#7EAA89]">
-                {{ number_format($stats['income_this_month'] ?? 0, 2) }}
+
+                {{ number_format(
+                    $stats['income_this_month'] ?? 0,
+                    2
+                ) }}
+
+                <span class="text-base font-semibold">
+                    {{ $baseCurrency }}
+                </span>
+
             </h3>
 
         </div>
@@ -171,12 +180,22 @@
             </p>
 
             <h3 class="mt-3 text-2xl font-bold text-[#B85C5C] dark:text-[#DF7E7E]">
-                {{ number_format($stats['expenses_this_month'] ?? 0, 2) }}
+
+                {{ number_format(
+                    $stats['expenses_this_month'] ?? 0,
+                    2
+                ) }}
+
+                <span class="text-base font-semibold">
+                    {{ $baseCurrency }}
+                </span>
+
             </h3>
 
         </div>
 
     </div>
+
 
 
     {{-- Recent Transactions --}}
@@ -235,27 +254,38 @@
                     <tr class="border-b border-[#EEE2D5] dark:border-[#463429]">
 
                         <th class="px-5 py-3 text-start">
+
                             <span class="text-theme-xs font-medium text-[#8A7A68] dark:text-[#C4B3A1]">
                                 {{ __('messages.transaction') }}
                             </span>
+
                         </th>
 
+
                         <th class="px-5 py-3 text-start">
+
                             <span class="text-theme-xs font-medium text-[#8A7A68] dark:text-[#C4B3A1]">
                                 {{ __('messages.type') }}
                             </span>
+
                         </th>
 
+
                         <th class="px-5 py-3 text-start">
+
                             <span class="text-theme-xs font-medium text-[#8A7A68] dark:text-[#C4B3A1]">
                                 {{ __('messages.amount') }}
                             </span>
+
                         </th>
 
+
                         <th class="px-5 py-3 text-start">
+
                             <span class="text-theme-xs font-medium text-[#8A7A68] dark:text-[#C4B3A1]">
                                 {{ __('messages.date') }}
                             </span>
+
                         </th>
 
                     </tr>
@@ -274,16 +304,23 @@
                                    dark:hover:bg-[#2A1F18]"
                         >
 
+                            {{-- Transaction --}}
                             <td class="px-5 py-4">
 
                                 <p class="text-theme-sm font-medium text-[#2B2118] dark:text-[#F7F1E8]">
                                     {{ $transaction->title ?? '-' }}
                                 </p>
 
+
                                 @if($transaction->description)
 
                                     <span class="text-theme-xs text-[#8A7A68] dark:text-[#C4B3A1]">
-                                        {{ Str::limit($transaction->description, 40) }}
+
+                                        {{ Str::limit(
+                                            $transaction->description,
+                                            40
+                                        ) }}
+
                                     </span>
 
                                 @endif
@@ -291,6 +328,7 @@
                             </td>
 
 
+                            {{-- Type --}}
                             <td class="px-5 py-4">
 
                                 @if($transaction->type === 'income')
@@ -300,11 +338,16 @@
                                                text-theme-xs font-medium"
 
                                         style="
-                                            background-color: rgba(79, 122, 90, .12);
-                                            color: #4F7A5A;
+                                            background-color:
+                                                rgba(79, 122, 90, .12);
+
+                                            color:
+                                                #4F7A5A;
                                         "
                                     >
+
                                         {{ __('messages.income') }}
+
                                     </span>
 
                                 @else
@@ -314,11 +357,16 @@
                                                text-theme-xs font-medium"
 
                                         style="
-                                            background-color: rgba(184, 92, 92, .12);
-                                            color: #B85C5C;
+                                            background-color:
+                                                rgba(184, 92, 92, .12);
+
+                                            color:
+                                                #B85C5C;
                                         "
                                     >
+
                                         {{ __('messages.expense') }}
+
                                     </span>
 
                                 @endif
@@ -326,19 +374,76 @@
                             </td>
 
 
+                            {{-- Amount --}}
                             <td class="px-5 py-4">
 
-                                <span class="text-theme-sm font-medium text-[#2B2118] dark:text-[#F7F1E8]">
-                                    {{ number_format($transaction->amount, 2) }}
-                                </span>
+                                <div>
+
+                                    {{-- Original transaction amount --}}
+                                    <p
+                                        class="text-theme-sm font-semibold
+                                               text-[#2B2118]
+                                               dark:text-[#F7F1E8]"
+                                    >
+
+                                        {{ number_format(
+                                            $transaction->amount,
+                                            2
+                                        ) }}
+
+                                        {{ $transaction->currency }}
+
+                                    </p>
+
+
+                                    {{-- Actual Account Amount --}}
+                                    @if(
+                                        $transaction->account_amount
+                                        &&
+                                        $transaction->account_currency
+                                        &&
+                                        $transaction->currency
+                                            !==
+                                        $transaction->account_currency
+                                    )
+
+                                        <p
+                                            class="mt-1 text-xs
+                                                   text-[#8A7A68]
+                                                   dark:text-[#C4B3A1]"
+                                        >
+
+                                            {{ __('messages.account_amount') }}:
+
+                                            {{ number_format(
+                                                $transaction->account_amount,
+                                                2
+                                            ) }}
+
+                                            {{ $transaction->account_currency }}
+
+                                        </p>
+
+                                    @endif
+
+                                </div>
 
                             </td>
 
 
+                            {{-- Date --}}
                             <td class="px-5 py-4">
 
-                                <span class="text-theme-sm text-[#8A7A68] dark:text-[#C4B3A1]">
-                                    {{ $transaction->transaction_date?->format('Y-m-d') }}
+                                <span
+                                    class="text-theme-sm
+                                           text-[#8A7A68]
+                                           dark:text-[#C4B3A1]"
+                                >
+
+                                    {{ $transaction
+                                        ->transaction_date
+                                        ?->format('Y-m-d') }}
+
                                 </span>
 
                             </td>
@@ -350,10 +455,15 @@
 
                         <tr>
 
-                            <td colspan="4" class="px-5 py-12 text-center">
+                            <td
+                                colspan="4"
+                                class="px-5 py-12 text-center"
+                            >
 
                                 <p class="text-sm text-[#8A7A68] dark:text-[#C4B3A1]">
+
                                     {{ __('messages.no_transactions_found') }}
+
                                 </p>
 
 
@@ -361,19 +471,22 @@
                                     href="{{ route('transactions.create') }}"
 
                                     class="mt-3 inline-flex rounded-lg
-                                           px-4 py-2 text-sm font-medium
+                                           px-4 py-2
+                                           text-sm font-medium
                                            text-white transition"
 
                                     style="
                                         background:
-                                        linear-gradient(
-                                            135deg,
-                                            #5E4029,
-                                            #8A6238
-                                        );
+                                            linear-gradient(
+                                                135deg,
+                                                #5E4029,
+                                                #8A6238
+                                            );
                                     "
                                 >
+
                                     {{ __('messages.add_first_transaction') }}
+
                                 </a>
 
                             </td>

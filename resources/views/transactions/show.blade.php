@@ -57,7 +57,7 @@
                 {{ number_format($transaction->amount, 2) }}
 
                 <span class="text-base font-medium text-gray-500 dark:text-gray-400">
-                    {{ $transaction->account?->currency }}
+                    {{ $transaction->currency }}
                 </span>
 
             </h3>

@@ -67,7 +67,15 @@ Route::prefix(LaravelLocalization::setLocale())
 
                 Route::get('/dashboard', [ControllersDashboardController::class, 'index'])->name('dashboard');
                 Route::resource('accounts', AccountController::class);
+                Route::post( 
+    '/categories/quick-store',
+    [CategoryController::class, 'quickStore']
+)->name('categories.quick-store');
                 Route::resource('categories', CategoryController::class);
+                Route::get(
+    '/transactions/exchange-preview',
+    [TransactionController::class, 'exchangePreview']
+)->name('transactions.exchange-preview');
                 Route::resource('transactions', TransactionController::class);
                 Route::resource('budgets', BudgetController::class);
                 Route::resource('goals', GoalController::class);

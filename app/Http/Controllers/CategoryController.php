@@ -98,7 +98,66 @@ class CategoryController extends Controller
 
         return redirect()->route('categories.index');
     }
+public function quickStore(Request $request)
+{
+    $validated = $request->validate([
+        'name_ar' => [
+            'required',
+            'string',
+            'max:255',
+        ],
 
+        'name_en' => [
+            'required',
+            'string',
+            'max:255',
+        ],
+
+        'type' => [
+            'required',
+            'in:income,expense',
+        ],
+    ]);
+
+
+    $category = Category::create([
+        'user_id' =>
+            auth()->id(),
+
+        'name' => [
+            'ar' =>
+                $validated['name_ar'],
+
+            'en' =>
+                $validated['name_en'],
+        ],
+
+        'type' =>
+            $validated['type'],
+    ]);
+
+
+    $locale =
+        app()->getLocale();
+
+
+    return response()->json([
+        'success' => true,
+
+        'category' => [
+            'id' =>
+                $category->id,
+
+            'type' =>
+                $category->type,
+
+            'name' =>
+                $category->name[$locale]
+                ?? $category->name['en']
+                ?? '',
+        ],
+    ]);
+}
     private function authorizeCategory(Category $category)
     {
         if (

@@ -10,6 +10,7 @@ class Transaction extends Model {
     protected $guarded = [];
     protected $casts = [
         'amount' => 'decimal:2',
+        'account_amount' => 'decimal:2',
         'exchange_rate' => 'decimal:8',
         'base_amount' => 'decimal:2',
         'transaction_date' => 'date',
