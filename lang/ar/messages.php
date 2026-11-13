@@ -448,10 +448,12 @@ return [
 
 'quick_add_category_description' =>
     'أضف تصنيفًا جديدًا بدون مغادرة صفحة العملية.',
-
+'saving_to_goal' => 'سيتم إضافته إلى الهدف',
+'will_be_deducted_from_account' => 'سيتم خصمه من الحساب',
 'select_transaction_type_first' =>
     'اختر نوع العملية أولًا قبل إضافة التصنيف.',
-
+'delete_saving_confirmation_auto_return' =>
+    'هل أنت متأكد من حذف هذا الادخار؟ سيتم إعادة المبلغ تلقائيًا إلى الحساب الأصلي.',
 'fill_required_fields' =>
     'يرجى تعبئة جميع الحقول المطلوبة.',
 

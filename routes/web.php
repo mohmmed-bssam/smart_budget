@@ -67,7 +67,7 @@ Route::prefix(LaravelLocalization::setLocale())
 
                 Route::get('/dashboard', [ControllersDashboardController::class, 'index'])->name('dashboard');
                 Route::resource('accounts', AccountController::class);
-                Route::post( 
+                Route::post(
     '/categories/quick-store',
     [CategoryController::class, 'quickStore']
 )->name('categories.quick-store');
@@ -81,6 +81,10 @@ Route::prefix(LaravelLocalization::setLocale())
                 Route::resource('goals', GoalController::class);
                 Route::resource('transfers', TransferController::class)
                      ->only(['index','create','store','show','destroy', ]);
+                     Route::get(
+    '/goals/{goal}/savings/exchange-preview',
+    [SavingController::class, 'exchangePreview']
+)->name('goals.savings.exchange-preview');
                      Route::post(
     '/goals/{goal}/savings',
     [SavingController::class, 'store']

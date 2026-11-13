@@ -11,7 +11,7 @@ class GoalController extends Controller
 {
     public function index()
     {
-        $goals = Goal::where('user_id', Auth::id())
+        $goals = Goal::with('savings')->where('user_id', Auth::id())
             ->latest()
             ->paginate(10);
 

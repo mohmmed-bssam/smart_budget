@@ -34,7 +34,7 @@
         @forelse($goals as $goal)
 
             @php
-                $saved = $goal->savings()->sum('amount');
+                $saved = $goal->savings->sum('amount');
 
                 $remaining = max(
                     $goal->target_amount - $saved,

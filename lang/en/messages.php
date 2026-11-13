@@ -470,10 +470,12 @@ return [
 
 'select_transaction_type_first' =>
     'Select the transaction type before adding a category.',
-
+'saving_to_goal' => 'Will be added to the goal',
+'will_be_deducted_from_account' => 'Will be deducted from the account',
 'fill_required_fields' =>
     'Please fill in all required fields.',
-
+'delete_saving_confirmation_auto_return' =>
+    'Are you sure you want to delete this saving? The amount will be automatically returned to the original account.',
 'category_create_failed' =>
     'Unable to create the category.',
 'exchange_rate' => 'Exchange rate',

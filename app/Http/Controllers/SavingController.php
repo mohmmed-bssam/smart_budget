@@ -359,165 +359,338 @@ class SavingController extends Controller
                 $goal
             );
     }
+public function exchangePreview(
+    Request $request,
+    Goal $goal,
+    CurrencyService $currencyService
+) {
+    $this->authorizeGoal($goal);
 
+    $validated = $request->validate([
+        'account_id' => [
+            'required',
+
+            Rule::exists('accounts', 'id')
+                ->where(
+                    'user_id',
+                    Auth::id()
+                ),
+        ],
+
+        'amount' => [
+            'required',
+            'numeric',
+            'min:0.01',
+        ],
+    ]);
+
+
+    $account = Account::where(
+        'id',
+        $validated['account_id']
+    )
+        ->where(
+            'user_id',
+            Auth::id()
+        )
+        ->firstOrFail();
+
+
+    $amount =
+        (float) $validated['amount'];
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Remaining Goal Amount
+    |--------------------------------------------------------------------------
+    */
+
+    $savedAmount =
+        (float) $goal
+            ->savings()
+            ->sum('amount');
+
+
+    $remaining =
+        max(
+            (float) $goal->target_amount
+            - $savedAmount,
+            0
+        );
+
+
+    if ($amount > $remaining) {
+
+        return response()->json([
+            'message' =>
+                __('messages.saving_exceeds_goal_remaining'),
+
+            'remaining' =>
+                round($remaining, 2),
+
+        ], 422);
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Same Currency
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        $goal->currency
+        ===
+        $account->currency
+    ) {
+
+        return response()->json([
+            'same_currency' => true,
+
+            'goal_currency' =>
+                $goal->currency,
+
+            'account_currency' =>
+                $account->currency,
+
+            'saving_amount' =>
+                round($amount, 2),
+
+            'account_amount' =>
+                round($amount, 2),
+
+            'rate' => 1,
+
+            'inverse_rate' => 1,
+        ]);
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Currency Conversion
+    |--------------------------------------------------------------------------
+    */
+
+    try {
+
+        $rate =
+            $currencyService->getRate(
+                $goal->currency,
+                $account->currency
+            );
+
+
+        $accountAmount =
+            round(
+                $amount * $rate,
+                2
+            );
+
+
+        $inverseRate =
+            $rate > 0
+                ? 1 / $rate
+                : null;
+
+
+        return response()->json([
+            'same_currency' => false,
+
+            'goal_currency' =>
+                $goal->currency,
+
+            'account_currency' =>
+                $account->currency,
+
+            'saving_amount' =>
+                round($amount, 2),
+
+            'account_amount' =>
+                $accountAmount,
+
+            'rate' =>
+                round($rate, 8),
+
+            'inverse_rate' =>
+                $inverseRate
+                    ? round($inverseRate, 8)
+                    : null,
+        ]);
+
+
+    } catch (\Throwable $e) {
+
+        return response()->json([
+            'message' =>
+                __('messages.currency_service_unavailable'),
+
+        ], 503);
+    }
+}
 
     public function destroy(
-        Request $request,
-        Saving $saving
+    Saving $saving
+) {
+    $saving->load([
+        'goal',
+        'account',
+    ]);
+
+
+    $goal =
+        $saving->goal;
+
+
+    $this->authorizeGoal(
+        $goal
+    );
+
+
+    DB::transaction(function () use (
+        $saving,
+        $goal
     ) {
-        $saving->load('goal');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Original Account
+        |--------------------------------------------------------------------------
+        |
+        | نرجع المبلغ إلى نفس الحساب
+        | الذي تم الخصم منه وقت إنشاء الادخار.
+        |
+        */
+
+        $account =
+            Account::where(
+                'id',
+                $saving->account_id
+            )
+                ->where(
+                    'user_id',
+                    Auth::id()
+                )
+                ->lockForUpdate()
+                ->firstOrFail();
 
 
-        $goal =
-            $saving->goal;
+        /*
+        |--------------------------------------------------------------------------
+        | Lock Goal
+        |--------------------------------------------------------------------------
+        */
+
+        $lockedGoal =
+            Goal::where(
+                'id',
+                $goal->id
+            )
+                ->where(
+                    'user_id',
+                    Auth::id()
+                )
+                ->lockForUpdate()
+                ->firstOrFail();
 
 
-        $this->authorizeGoal(
-            $goal
+        /*
+        |--------------------------------------------------------------------------
+        | Return Money
+        |--------------------------------------------------------------------------
+        |
+        | نرجع نفس المبلغ الذي خرج من الحساب.
+        |
+        | مثال:
+        |
+        | Saving:
+        | 100 USD
+        |
+        | Account deduction:
+        | 318 ILS
+        |
+        | عند الحذف:
+        | +318 ILS لنفس الحساب.
+        |
+        */
+
+        $amountToReturn =
+            $saving->source_amount
+            ?? $saving->amount;
+
+
+        $account->increment(
+            'balance',
+            $amountToReturn
         );
 
 
         /*
         |--------------------------------------------------------------------------
-        | عند حذف Saving
+        | Delete Saving
         |--------------------------------------------------------------------------
-        |
-        | لازم نرجع قيمته إلى حساب بنفس عملة الهدف.
-        |
-        | Goal USD
-        | Saving 100 USD
-        |
-        | يرجع 100 USD إلى حساب USD.
-        |
         */
 
-        $validated = $request->validate([
-            'return_account_id' => [
-                'required',
-
-                Rule::exists('accounts', 'id')
-                    ->where(function ($query) use ($goal) {
-
-                        $query
-                            ->where(
-                                'user_id',
-                                Auth::id()
-                            )
-                            ->where(
-                                'currency',
-                                $goal->currency
-                            );
-                    }),
-            ],
-        ]);
+        $saving->delete();
 
 
-        DB::transaction(function () use (
-            $validated,
-            $saving,
-            $goal
+        /*
+        |--------------------------------------------------------------------------
+        | Recalculate Goal
+        |--------------------------------------------------------------------------
+        */
+
+        $newSavedAmount =
+            (float) $lockedGoal
+                ->savings()
+                ->sum('amount');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Goal Status
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            $lockedGoal->status
+            === 'cancelled'
         ) {
+            $newStatus =
+                'cancelled';
 
-            $returnAccount =
-                Account::where(
-                    'id',
-                    $validated['return_account_id']
-                )
-                ->where(
-                    'user_id',
-                    Auth::id()
-                )
-                ->where(
-                    'currency',
-                    $goal->currency
-                )
-                ->lockForUpdate()
-                ->firstOrFail();
+        } else {
+
+            $newStatus =
+                $newSavedAmount
+                    >= (float) $lockedGoal->target_amount
+                    ? 'completed'
+                    : 'active';
+        }
 
 
-            $lockedGoal =
-                Goal::where(
-                    'id',
-                    $goal->id
-                )
-                ->where(
-                    'user_id',
-                    Auth::id()
-                )
-                ->lockForUpdate()
-                ->firstOrFail();
+        $lockedGoal->update([
+            'current_amount' =>
+                $newSavedAmount,
+
+            'status' =>
+                $newStatus,
+        ]);
+    });
 
 
-            /*
-             * نرجع قيمة الادخار نفسها
-             * بعملة الهدف.
-             */
-            $returnAccount->increment(
-                'balance',
-                $saving->amount
-            );
+    flash()->warning(
+        __('messages.saving_deleted')
+    );
 
 
-            /*
-             * نحذف Saving
-             */
-            $saving->delete();
-
-
-            /*
-             * نعيد حساب مجموع الادخار.
-             */
-            $newSavedAmount =
-                (float) $lockedGoal
-                    ->savings()
-                    ->sum('amount');
-
-
-            /*
-             * إذا كان الهدف مكتمل
-             * وبعد الحذف صار أقل من الهدف
-             * يرجع Active.
-             *
-             * لو كان Cancelled
-             * نخليه Cancelled.
-             */
-
-            if (
-                $lockedGoal->status
-                === 'cancelled'
-            ) {
-                $newStatus =
-                    'cancelled';
-            } else {
-                $newStatus =
-                    $newSavedAmount
-                        >= (float) $lockedGoal->target_amount
-                        ? 'completed'
-                        : 'active';
-            }
-
-
-            $lockedGoal->update([
-                'current_amount' =>
-                    $newSavedAmount,
-
-                'status' =>
-                    $newStatus,
-            ]);
-        });
-
-
-        flash()->warning(
-            __('messages.saving_deleted')
+    return redirect()
+        ->route(
+            'goals.show',
+            $goal
         );
-
-
-        return redirect()
-            ->route(
-                'goals.show',
-                $goal
-            );
-    }
+}
 
 
     private function authorizeGoal(
