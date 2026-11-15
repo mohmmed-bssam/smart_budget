@@ -467,7 +467,8 @@ return [
 
 'quick_add_category_description' =>
     'Add a new category without leaving the transaction page.',
-
+'goal_deadline_passed_cannot_save' =>
+    'The deadline for this goal has passed, so no new savings can be added.',
 'select_transaction_type_first' =>
     'Select the transaction type before adding a category.',
 'saving_to_goal' => 'Will be added to the goal',

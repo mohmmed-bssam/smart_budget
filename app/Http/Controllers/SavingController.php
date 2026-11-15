@@ -20,7 +20,18 @@ class SavingController extends Controller
         CurrencyService $currencyService
     ) {
         $this->authorizeGoal($goal);
-
+if (
+    $goal->deadline
+    &&
+    $goal->deadline->lt(today())
+) {
+    return back()
+        ->withErrors([
+            'amount' =>
+                __('messages.goal_deadline_passed_cannot_save'),
+        ])
+        ->withInput();
+}
 
         if ($goal->status === 'completed') {
             return back()->withErrors([
@@ -226,10 +237,11 @@ class SavingController extends Controller
                     ->savings()
                     ->sum('amount');
 
-
-            $remaining =
-                (float) $lockedGoal->target_amount
-                - $currentSaved;
+$remaining = round(
+    (float) $lockedGoal->target_amount
+    - $currentSaved,
+    2
+);
 
 
             /*
@@ -238,15 +250,15 @@ class SavingController extends Controller
             |--------------------------------------------------------------------------
             */
 
-            if (
-                (float) $validated['amount']
-                > $remaining
-            ) {
-                throw ValidationException::withMessages([
-                    'amount' =>
-                        __('messages.saving_exceeds_goal_remaining'),
-                ]);
-            }
+           if (
+    round((float) $validated['amount'], 2)
+    > $remaining
+) {
+    throw ValidationException::withMessages([
+        'amount' =>
+            __('messages.saving_exceeds_goal_remaining'),
+    ]);
+}
 
 
             /*
@@ -412,12 +424,14 @@ public function exchangePreview(
             ->sum('amount');
 
 
-    $remaining =
-        max(
-            (float) $goal->target_amount
-            - $savedAmount,
-            0
-        );
+    $remaining = round(
+    max(
+        (float) $goal->target_amount
+        - $savedAmount,
+        0
+    ),
+    2
+);
 
 
     if ($amount > $remaining) {

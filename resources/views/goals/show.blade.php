@@ -46,8 +46,18 @@
         },
 
         get amountExceedsRemaining() {
-            return Number(this.savingAmount || 0) >
-                Number(this.remainingAmount);
+
+            const amount =
+                Math.round(
+                    Number(this.savingAmount || 0) * 100
+                ) / 100;
+
+            const remaining =
+                Math.round(
+                    Number(this.remainingAmount || 0) * 100
+                ) / 100;
+
+            return amount > remaining;
         },
 
         get invalidAmount() {
@@ -377,8 +387,7 @@
                     class="text-lg font-bold
                        text-[#6B4A2D]
                        dark:text-[#D8B77A]">
-                    {{ number_format($percentage, 1) }}%
-                </span>
+                    {{ number_format($percentage, 2) }}% </span>
 
             </div>
 
@@ -439,8 +448,7 @@
 
 
         {{-- Add Saving --}}
-        @if ($goal->status === 'active')
-
+        @if ($goal->status === 'active' && (!$goal->deadline || $goal->deadline->isToday() || $goal->deadline->isFuture()))
             <div
                 class="rounded-2xl border p-6
                    border-[#E8DDCF]
@@ -1032,6 +1040,24 @@
                 @endif
 
             </div>
+        @elseif($goal->status === 'active' && $goal->deadline && $goal->deadline->isPast())
+            <div
+                class="rounded-2xl border
+               border-[#E6BDBD]
+               bg-[#F8EAEA]
+               p-5
+               text-sm
+               text-[#B85C5C]
+
+               dark:border-[#674040]
+               dark:bg-[#3A2222]
+               dark:text-[#DF7E7E]">
+
+                <i class="fa-solid fa-clock me-2"></i>
+
+                {{ __('messages.goal_deadline_passed_cannot_save') }}
+
+            </div>
 
         @endif
 
@@ -1176,19 +1202,19 @@
 
 
                                 {{-- Delete Saving --}}
-                                    <form method="POST" action="{{ route('savings.destroy', $saving) }}"
-                                        onsubmit="
+                                <form method="POST" action="{{ route('savings.destroy', $saving) }}"
+                                    onsubmit="
         return confirm(
             @js(__('messages.delete_saving_confirmation_auto_return'))
         )
     ">
 
-                                        @csrf
-                                        @method('DELETE')
+                                    @csrf
+                                    @method('DELETE')
 
 
-                                        <button type="submit"
-                                            class="rounded-lg border
+                                    <button type="submit"
+                                        class="rounded-lg border
                border-[#E6BDBD]
                px-3 py-2
                text-xs font-medium
@@ -1200,13 +1226,13 @@
                dark:text-[#DF7E7E]
                dark:hover:bg-[#3A2222]">
 
-                                            <i class="fa-solid fa-trash me-1"></i>
+                                        <i class="fa-solid fa-trash me-1"></i>
 
-                                            {{ __('messages.delete') }}
+                                        {{ __('messages.delete') }}
 
-                                        </button>
+                                    </button>
 
-                                    </form>
+                                </form>
 
                             </div>
 
