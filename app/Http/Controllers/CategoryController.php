@@ -3,19 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
-    public function index()
-    {
-        $categories = Category::where('user_id', auth()->id())
-            ->orWhereNull('user_id')
-            ->latest()
-            ->paginate(10);
+ public function index()
+{
+    $itemsPerPage = (int) Setting::where('key', 'items_per_page')
+        ->value('value');
 
-        return view('categories.index', compact('categories'));
-    }
+    $itemsPerPage = $itemsPerPage ?: 10;
+
+    $categories = Category::where('user_id', Auth::id())
+        ->orWhereNull('user_id')
+        ->latest()
+        ->paginate($itemsPerPage);
+
+    return view('categories.index', compact('categories'));
+}
 
     public function create()
     {
@@ -32,7 +39,7 @@ class CategoryController extends Controller
         ]);
 
         Category::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
 
             'name' => [
                 'ar' => $request->name_ar,
@@ -122,7 +129,7 @@ public function quickStore(Request $request)
 
     $category = Category::create([
         'user_id' =>
-            auth()->id(),
+            Auth::id(),
 
         'name' => [
             'ar' =>
@@ -158,13 +165,14 @@ public function quickStore(Request $request)
         ],
     ]);
 }
-    private function authorizeCategory(Category $category)
-    {
-        if (
-            $category->user_id !== auth()->id()
-            && $category->user_id !== null
-        ) {
-            abort(403);
-        }
+ private function authorizeCategory(Category $category)
+{
+    if (
+        $category->user_id === null
+        ||
+        $category->user_id !== Auth::id()
+    ) {
+        abort(403);
     }
+}
 }

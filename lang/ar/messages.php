@@ -6,6 +6,37 @@ return [
     'settings' => 'الإعدادات',
     'reports' => 'التقارير',
     'logout' => 'تسجيل الخروج',
+    'home' => 'الرئيسية',
+
+'create_account_title' => 'إضافة حساب',
+'edit_account_title' => 'تعديل الحساب',
+'account_details' => 'تفاصيل الحساب',
+
+'create_category_title' => 'إضافة تصنيف',
+'edit_category_title' => 'تعديل التصنيف',
+'category_details' => 'تفاصيل التصنيف',
+
+'create_transaction_title' => 'إضافة عملية مالية',
+'edit_transaction_title' => 'تعديل العملية المالية',
+'transaction_details' => 'تفاصيل العملية المالية',
+
+'create_budget_title' => 'إضافة ميزانية',
+'edit_budget_title' => 'تعديل الميزانية',
+'budget_details' => 'تفاصيل الميزانية',
+
+'create_goal_title' => 'إضافة هدف مالي',
+'edit_goal_title' => 'تعديل الهدف المالي',
+'goal_details' => 'تفاصيل الهدف المالي',
+
+'create_transfer_title' => 'إضافة تحويل',
+'transfer_details' => 'تفاصيل التحويل',
+
+'admin_dashboard' => 'لوحة تحكم الإدارة',
+'profile' => 'الملف الشخصي',
+
+'reset_password' => 'إعادة تعيين كلمة المرور',
+'confirm_password' => 'تأكيد كلمة المرور',
+'verify_email' => 'تأكيد البريد الإلكتروني',
     // Users
     'user_created' => 'تم إنشاء المستخدم بنجاح',
     'user_updated' => 'تم تحديث بيانات المستخدم بنجاح',
@@ -58,7 +89,6 @@ return [
     'users_management' => 'إدارة المستخدمين',
     'users_management_description' => 'إدارة حسابات المستخدمين وصلاحياتهم',
 
-    'user' => 'مستخدم',
     'admin' => 'مسؤول',
     'role' => 'الصلاحية',
     'status' => 'الحالة',
@@ -74,15 +104,91 @@ return [
 
     'role_updated' => 'تم تحديث صلاحية المستخدم بنجاح',
     'status_updated' => 'تم تحديث حالة المستخدم بنجاح',
+'smart_money_management' =>
+    'إدارة مالية أذكى',
 
+'smart_budget_badge' =>
+    'إدارة أموالك بطريقة أبسط وأذكى',
+
+'welcome_hero_title' =>
+    'تحكم بأموالك وخطط لمستقبلك المالي بثقة',
+
+'welcome_hero_description' =>
+    'SmartBudget يساعدك على إدارة حساباتك، متابعة دخلك ومصروفاتك، تنظيم ميزانيتك، وتحقيق أهدافك المالية من مكان واحد.',
+
+'start_now' =>
+    'ابدأ الآن',
+
+'go_to_dashboard' =>
+    'الذهاب إلى لوحة التحكم',
+
+'multi_currency_support' =>
+    'دعم عدة عملات',
+
+'bilingual_support' =>
+    'دعم العربية والإنجليزية',
+
+'financial_reports' =>
+    'تقارير مالية واضحة',
+
+'financial_overview' =>
+    'نظرة مالية سريعة',
+
+'your_budget_at_glance' =>
+    'أموالك في مكان واحد',
+
+'smartbudget_features' =>
+    'مميزات SmartBudget',
+
+'everything_you_need' =>
+    'كل ما تحتاجه لإدارة أموالك',
+
+'features_description' =>
+    'أدوات بسيطة ومنظمة تساعدك على متابعة وضعك المالي واتخاذ قرارات أفضل.',
+
+'manage_accounts' =>
+    'إدارة الحسابات',
+
+'manage_accounts_description' =>
+    'أضف حساباتك المختلفة وتابع رصيد كل حساب بسهولة.',
+
+'track_transactions' =>
+    'متابعة العمليات',
+
+'track_transactions_description' =>
+    'سجل الدخل والمصروفات والتحويلات مع دعم العملات المختلفة.',
+
+'plan_budgets' =>
+    'إدارة الميزانيات',
+
+'plan_budgets_description' =>
+    'حدد ميزانيات شهرية وتابع مقدار الإنفاق والمتبقي منها.',
+
+'reach_goals' =>
+    'تحقيق الأهداف',
+
+'reach_goals_description' =>
+    'أنشئ أهدافك المالية وتابع مدخراتك ونسبة تقدمك.',
+
+'ready_to_manage_money' =>
+    'جاهز تبدأ تنظيم أموالك؟',
+
+'ready_to_manage_money_description' =>
+    'ابدأ باستخدام SmartBudget واجمع حساباتك وميزانيتك وأهدافك المالية في مكان واحد.',
+
+'all_rights_reserved' =>
+    'جميع الحقوق محفوظة.',
     'cannot_change_own_role' => 'لا يمكنك تغيير صلاحية حسابك الحالي',
     'cannot_change_own_status' => 'لا يمكنك تعطيل حسابك الحالي',
     'cannot_delete_yourself' => 'لا يمكنك حذف حسابك الحالي',
-
+'registration_disabled' =>
+    'التسجيل غير متاح حاليًا.',
     'delete_user_confirmation' => 'هل أنت متأكد من حذف هذا المستخدم؟',
     'change_role_confirmation' => 'هل أنت متأكد من تغيير صلاحية هذا المستخدم؟',
     'change_status_confirmation' => 'هل أنت متأكد من تغيير حالة هذا المستخدم؟',
-
+'new_users_this_month' => 'المستخدمون الجدد هذا الشهر',
+'transactions_this_month' => 'العمليات المالية هذا الشهر',
+'goals_this_month' => 'الأهداف المنشأة هذا الشهر',
     'search_users' => 'ابحث بالاسم أو البريد أو الهاتف...',
     'joined_at' => 'تاريخ التسجيل',
     'actions' => 'الإجراءات',
@@ -165,7 +271,6 @@ return [
     'account_name_en' => 'اسم الحساب بالإنجليزية',
     'cancel' => 'إلغاء',
     'save_account' => 'حفظ الحساب',
-    'account_details' => 'تفاصيل الحساب',
     'back_to_accounts' => 'العودة إلى الحسابات',
     'account_transactions' => 'عمليات الحساب',
     'account_transactions_description' => 'العمليات المالية المرتبطة بهذا الحساب',
@@ -522,7 +627,26 @@ return [
 
 'movement_type' =>
     'نوع الحركة',
+'new_users_this_month' => 'المستخدمون الجدد هذا الشهر',
+'transactions_this_month' => 'العمليات المالية هذا الشهر',
 
+'income_transactions_this_month' =>
+    'عمليات الدخل هذا الشهر',
+
+'expense_transactions_this_month' =>
+    'عمليات المصروف هذا الشهر',
+
+'goals_this_month' =>
+    'الأهداف المنشأة هذا الشهر',
+
+'recent_transactions_this_month' =>
+    'آخر عمليات هذا الشهر',
+
+'recent_transactions_this_month_description' =>
+    'أحدث العمليات المالية المسجلة خلال الشهر الحالي.',
+
+'no_transactions_this_month' =>
+    'لا توجد عمليات مالية خلال هذا الشهر.',
 'no_movements_in_period' =>
     'لا توجد حركات مالية خلال الفترة المحددة.',
 'closing_balance' => 'رصيد آخر المدة',

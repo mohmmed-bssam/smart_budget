@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', __('messages.create_transfer_title'))
 
 @section('content')
 

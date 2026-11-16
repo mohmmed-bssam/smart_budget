@@ -13,12 +13,17 @@ use Illuminate\Validation\Rule;
 
 class BudgetController extends Controller
 {
-  public function index()
+public function index()
 {
+    $itemsPerPage = (int) Setting::where('key', 'items_per_page')
+        ->value('value');
+
+    $itemsPerPage = $itemsPerPage ?: 10;
+
     $budgets = Budget::where('user_id', Auth::id())
         ->with('category')
         ->latest()
-        ->paginate(10);
+        ->paginate($itemsPerPage);
 
     foreach ($budgets as $budget) {
 
@@ -45,7 +50,6 @@ class BudgetController extends Controller
 
     return view('budgets.index', compact('budgets'));
 }
-
 
     public function create()
     {

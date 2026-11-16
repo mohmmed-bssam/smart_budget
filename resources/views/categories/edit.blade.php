@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', __('messages.edit_category_title'))
 
 @section('content')
 
@@ -106,7 +107,7 @@
                 </div>
 
 
-              
+
 
             </div>
 

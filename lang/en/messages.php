@@ -13,6 +13,37 @@ return [
 
     // General
     'success' => 'Operation completed successfully',
+    'home' => 'Home',
+
+'create_account_title' => 'Create Account',
+'edit_account_title' => 'Edit Account',
+'account_details' => 'Account Details',
+
+'create_category_title' => 'Create Category',
+'edit_category_title' => 'Edit Category',
+'category_details' => 'Category Details',
+
+'create_transaction_title' => 'Create Transaction',
+'edit_transaction_title' => 'Edit Transaction',
+'transaction_details' => 'Transaction Details',
+
+'create_budget_title' => 'Create Budget',
+'edit_budget_title' => 'Edit Budget',
+'budget_details' => 'Budget Details',
+
+'create_goal_title' => 'Create Goal',
+'edit_goal_title' => 'Edit Goal',
+'goal_details' => 'Goal Details',
+
+'create_transfer_title' => 'Create Transfer',
+'transfer_details' => 'Transfer Details',
+
+'admin_dashboard' => 'Admin Dashboard',
+'profile' => 'Profile',
+
+'reset_password' => 'Reset Password',
+'confirm_password' => 'Confirm Password',
+'verify_email' => 'Verify Email',
     'error' => 'Something went wrong, please try again',
     'account_created' => 'Account created successfully',
     'account_updated' => 'Account updated successfully',
@@ -352,8 +383,85 @@ return [
     'view_all_notifications' => 'View All Notifications',
     'savings_history' => 'Savings History',
     'no_savings_found' => 'No savings have been added to this goal yet.',
-    // en
-    'transfer_created' => 'Transfer completed successfully.',
+    'smart_money_management' =>
+    'Smarter Money Management',
+
+'smart_budget_badge' =>
+    'Manage your money in a simpler and smarter way',
+
+'welcome_hero_title' =>
+    'Take Control of Your Money and Plan Your Financial Future',
+
+'welcome_hero_description' =>
+    'SmartBudget helps you manage accounts, track income and expenses, organize budgets, and achieve your financial goals all in one place.',
+
+'start_now' =>
+    'Get Started',
+
+'go_to_dashboard' =>
+    'Go to Dashboard',
+
+'multi_currency_support' =>
+    'Multi-Currency Support',
+
+'bilingual_support' =>
+    'Arabic & English Support',
+
+'financial_reports' =>
+    'Clear Financial Reports',
+
+'financial_overview' =>
+    'Financial Overview',
+
+'your_budget_at_glance' =>
+    'Your Money at a Glance',
+
+'smartbudget_features' =>
+    'SmartBudget Features',
+
+'everything_you_need' =>
+    'Everything You Need to Manage Your Money',
+
+'features_description' =>
+    'Simple and organized tools to help you understand your finances and make better decisions.',
+
+'manage_accounts' =>
+    'Manage Accounts',
+
+'manage_accounts_description' =>
+    'Add your different financial accounts and easily track each balance.',
+
+'track_transactions' =>
+    'Track Transactions',
+
+'track_transactions_description' =>
+    'Record income, expenses, and transfers with support for multiple currencies.',
+
+'plan_budgets' =>
+    'Plan Budgets',
+
+'plan_budgets_description' =>
+    'Create monthly budgets and track spending and remaining amounts.',
+
+'reach_goals' =>
+    'Reach Your Goals',
+
+'reach_goals_description' =>
+    'Create financial goals and monitor your savings and progress.',
+
+'ready_to_manage_money' =>
+    'Ready to Take Control of Your Money?',
+
+'ready_to_manage_money_description' =>
+    'Start using SmartBudget and manage your accounts, budgets, and financial goals in one place.',
+
+'all_rights_reserved' =>
+    'All rights reserved.',
+'registration_disabled' =>
+    'Registration is currently unavailable.',
+'new_users_this_month' => 'New Users This Month',
+'transactions_this_month' => 'Transactions This Month',
+'goals_this_month' => 'Goals Created This Month',    'transfer_created' => 'Transfer completed successfully.',
     'transfer_deleted' => 'Transfer reversed and balances restored successfully.',
     'insufficient_account_balance' => 'The account balance is insufficient to complete this operation.',
     'cannot_reverse_transfer' => 'This transfer cannot be reversed because the receiving account does not have enough balance.',
@@ -363,7 +471,6 @@ return [
     'new_transfer_description' => 'Move money from one account to another',
     'from_account' => 'From Account',
     'to_account' => 'To Account',
-    'select_account' => 'Select Account',
     'transfer_amount' => 'Transfer Amount',
     'transfer_date' => 'Transfer Date',
     'transfer_money' => 'Transfer Money',
@@ -380,11 +487,6 @@ return [
     'transfer' => 'Transfer Between Accounts',
     'transfer_accounts_must_be_different' =>
     'Please select a different destination account.',
-    'saving_created' =>
-    'Saving added successfully.',
-
-    'saving_deleted' =>
-    'Saving deleted and the amount was returned to the account.',
 
     'goal_already_completed' =>
     'This goal has already been completed and cannot receive additional savings.',
@@ -520,7 +622,27 @@ return [
 
 'net_movement' =>
     'Net Movement',
+'transactions_this_month' =>
+    'Transactions This Month',
 
+'income_transactions_this_month' =>
+    'Income Transactions This Month',
+
+'expense_transactions_this_month' =>
+    'Expense Transactions This Month',
+
+'goals_this_month' =>
+    'Goals Created This Month',
+
+'recent_transactions_this_month' =>
+    'Recent Transactions This Month',
+
+'recent_transactions_this_month_description' =>
+    'The latest financial transactions recorded during the current month.',
+// en
+'new_users_this_month' => 'New Users This Month',
+'no_transactions_this_month' =>
+    'There are no financial transactions this month.',
 'movement_type' =>
     'Movement Type',
 'closing_balance' => 'Closing Balance',

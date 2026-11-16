@@ -1,11 +1,37 @@
 export const initChartOne = () => {
     const chartElement = document.querySelector('#chartOne');
+
     if (!chartElement) return;
 
-    const income = JSON.parse(chartElement.dataset.income || '[]');
-    const expenses = JSON.parse(chartElement.dataset.expenses || '[]');
-    const incomeLabel = chartElement.dataset.incomeLabel || 'Income';
-    const expensesLabel = chartElement.dataset.expensesLabel || 'Expenses';
+    const income = JSON.parse(
+        chartElement.dataset.income || '[]'
+    );
+
+    const expenses = JSON.parse(
+        chartElement.dataset.expenses || '[]'
+    );
+
+    const incomeLabel =
+        chartElement.dataset.incomeLabel || 'Income';
+
+    const expensesLabel =
+        chartElement.dataset.expensesLabel || 'Expenses';
+
+    const currency =
+        chartElement.dataset.currency || 'USD';
+
+
+    const formatCurrency = (value) => {
+        return `${Number(value).toLocaleString(
+            undefined,
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }
+        )} ${currency}`;
+    };
+
+
     const chartOneOptions = {
         series: [
             {
@@ -18,12 +44,16 @@ export const initChartOne = () => {
             },
         ],
 
-        colors: ["#12B76A", "#F04438"],
+        colors: [
+            "#12B76A",
+            "#F04438",
+        ],
 
         chart: {
             fontFamily: "Outfit, sans-serif",
             type: "bar",
             height: 260,
+
             toolbar: {
                 show: false,
             },
@@ -45,7 +75,9 @@ export const initChartOne = () => {
         stroke: {
             show: true,
             width: 4,
-            colors: ["transparent"],
+            colors: [
+                "transparent",
+            ],
         },
 
         xaxis: {
@@ -63,9 +95,11 @@ export const initChartOne = () => {
                 "Nov",
                 "Dec",
             ],
+
             axisBorder: {
                 show: false,
             },
+
             axisTicks: {
                 show: false,
             },
@@ -76,6 +110,7 @@ export const initChartOne = () => {
             position: "top",
             horizontalAlign: "left",
             fontFamily: "Outfit",
+
             markers: {
                 radius: 99,
             },
@@ -84,7 +119,7 @@ export const initChartOne = () => {
         yaxis: {
             labels: {
                 formatter: function (val) {
-                    return Number(val).toLocaleString();
+                    return formatCurrency(val);
                 },
             },
         },
@@ -105,15 +140,21 @@ export const initChartOne = () => {
             x: {
                 show: true,
             },
+
             y: {
                 formatter: function (val) {
-                    return Number(val).toLocaleString();
+                    return formatCurrency(val);
                 },
             },
         },
     };
 
-    const chart = new ApexCharts(chartElement, chartOneOptions);
+
+    const chart = new ApexCharts(
+        chartElement,
+        chartOneOptions
+    );
+
     chart.render();
 
     return chart;

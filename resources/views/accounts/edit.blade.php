@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', __('messages.edit_account_title'))
 @section('content')
 <div class="space-y-6">
 

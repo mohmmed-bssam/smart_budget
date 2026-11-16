@@ -12,6 +12,9 @@ class DashboardController extends Controller
 {
     public function index()
     {
+         if (Auth::user()->role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    }
         $userId = Auth::id();
 
 
@@ -136,24 +139,31 @@ class DashboardController extends Controller
         |
         */
 
-        $recentTransactions =
-            Transaction::where(
-                'user_id',
-                $userId
-            )
-                ->with([
-                    'account',
-                    'category',
-                ])
-                ->latest(
-                    'transaction_date'
-                )
-                ->latest(
-                    'id'
-                )
-                ->take(5)
-                ->get();
-
+$recentTransactions =
+    Transaction::where(
+        'user_id',
+        $userId
+    )
+        ->with([
+            'account',
+            'category',
+        ])
+        ->whereYear(
+            'transaction_date',
+            now()->year
+        )
+        ->whereMonth(
+            'transaction_date',
+            now()->month
+        )
+        ->latest(
+            'transaction_date'
+        )
+        ->latest(
+            'id'
+        )
+        ->take(5)
+        ->get();
 
         return view(
             'dashboard',

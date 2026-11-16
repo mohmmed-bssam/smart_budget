@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', __('messages.users'))
 @section('content')
     <div data-search-page="users" class="space-y-6">
         {{-- Header --}}

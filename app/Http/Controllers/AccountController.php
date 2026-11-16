@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use App\Models\Saving;
+use App\Models\Setting;
 use App\Models\Transfer;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -12,13 +13,19 @@ use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
 class AccountController extends Controller {
 
-    public function index() {
-        $accounts = Account::where( 'user_id', auth()->id() )
-        ->latest()
-        ->paginate( 10 );
+ public function index()
+{
+    $itemsPerPage = (int) Setting::where('key', 'items_per_page')
+        ->value('value');
 
-        return view( 'accounts.index', compact( 'accounts' ) );
-    }
+    $itemsPerPage = $itemsPerPage ?: 10;
+
+    $accounts = Account::where('user_id', auth()->id())
+        ->latest()
+        ->paginate($itemsPerPage);
+
+    return view('accounts.index', compact('accounts'));
+}
 
     public function create() {
         return view( 'accounts.create' );

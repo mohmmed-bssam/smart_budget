@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
+use App\Models\Setting;
 use App\Models\Transfer;
 use App\Services\CurrencyService;
 use Illuminate\Http\Request;
@@ -12,21 +13,26 @@ use Illuminate\Validation\Rule;
 
 class TransferController extends Controller
 {
-    public function index()
-    {
-        $transfers = Transfer::where('user_id', Auth::id())
-            ->with([
-                'fromAccount',
-                'toAccount',
-            ])
-            ->latest('transfer_date')
-            ->paginate(10);
+   public function index()
+{
+    $itemsPerPage = (int) Setting::where('key', 'items_per_page')
+        ->value('value');
 
-        return view(
-            'transfers.index',
-            compact('transfers')
-        );
-    }
+    $itemsPerPage = $itemsPerPage ?: 10;
+
+    $transfers = Transfer::where('user_id', Auth::id())
+        ->with([
+            'fromAccount',
+            'toAccount',
+        ])
+        ->latest('transfer_date')
+        ->paginate($itemsPerPage);
+
+    return view(
+        'transfers.index',
+        compact('transfers')
+    );
+}
 
 
     public function create()

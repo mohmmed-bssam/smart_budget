@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', __('messages.create_category_title'))
 
 @section('content')
 

@@ -21,9 +21,9 @@
     >
 
 
-    <title>
-        {{ $title ?? 'Dashboard' }} | SmartBudget
-    </title>
+   <title>
+    @yield('title', __('messages.dashboard')) | SmartBudget
+</title>
 
 
     {{-- Font Awesome --}}

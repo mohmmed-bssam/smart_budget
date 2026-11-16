@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', __('messages.budget_details'))
 @section('content')
 
 @php

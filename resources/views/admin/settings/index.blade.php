@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', __('messages.settings'))
 @section('content')
 
 <div class="space-y-6">
@@ -43,10 +43,13 @@
                         type="text"
                         name="app_name"
                         value="{{ old('app_name', $settings['app_name'] ?? 'SmartBudget') }}"
-                        class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4
+
+                        class="h-11 w-full rounded-lg border
+                               border-gray-300 bg-transparent px-4
                                text-sm text-gray-800 outline-none
-                               focus:border-brand-500
-                               dark:border-gray-700 dark:text-white/90"
+                               focus:border-[#B88945]
+                               dark:border-gray-700
+                               dark:text-white/90"
                     >
 
                     @error('app_name')
@@ -65,16 +68,21 @@
 
                     <select
                         name="default_currency"
-                        class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4
+
+                        class="h-11 w-full rounded-lg border
+                               border-gray-300 bg-transparent px-4
                                text-sm text-gray-800 outline-none
-                               focus:border-brand-500
-                               dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+                               focus:border-[#B88945]
+                               dark:border-gray-700
+                               dark:bg-gray-900
+                               dark:text-white/90"
                     >
 
                         @foreach(['USD', 'EUR', 'ILS', 'JOD', 'GBP'] as $currency)
 
                             <option
                                 value="{{ $currency }}"
+
                                 @selected(
                                     old(
                                         'default_currency',
@@ -88,6 +96,12 @@
                         @endforeach
 
                     </select>
+
+                    @error('default_currency')
+                        <p class="mt-1 text-sm text-error-500">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
 
 
@@ -100,11 +114,18 @@
                     <input
                         type="email"
                         name="support_email"
-                        value="{{ old('support_email', $settings['support_email'] ?? '') }}"
-                        class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4
+
+                        value="{{ old(
+                            'support_email',
+                            $settings['support_email'] ?? ''
+                        ) }}"
+
+                        class="h-11 w-full rounded-lg border
+                               border-gray-300 bg-transparent px-4
                                text-sm text-gray-800 outline-none
-                               focus:border-brand-500
-                               dark:border-gray-700 dark:text-white/90"
+                               focus:border-[#B88945]
+                               dark:border-gray-700
+                               dark:text-white/90"
                     >
 
                     @error('support_email')
@@ -123,16 +144,21 @@
 
                     <select
                         name="items_per_page"
-                        class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4
+
+                        class="h-11 w-full rounded-lg border
+                               border-gray-300 bg-transparent px-4
                                text-sm text-gray-800 outline-none
-                               focus:border-brand-500
-                               dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+                               focus:border-[#B88945]
+                               dark:border-gray-700
+                               dark:bg-gray-900
+                               dark:text-white/90"
                     >
 
                         @foreach([5, 10, 15, 25, 50] as $number)
 
                             <option
                                 value="{{ $number }}"
+
                                 @selected(
                                     old(
                                         'items_per_page',
@@ -146,6 +172,12 @@
                         @endforeach
 
                     </select>
+
+                    @error('items_per_page')
+                        <p class="mt-1 text-sm text-error-500">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
 
             </div>
@@ -160,7 +192,12 @@
                         type="checkbox"
                         name="registration_enabled"
                         value="1"
-                        class="h-5 w-5 rounded border-gray-300"
+
+                        class="h-5 w-5 rounded
+                               border-gray-300
+                               text-[#6B4A2D]
+                               focus:ring-[#B88945]"
+
                         @checked(
                             old(
                                 'registration_enabled',
@@ -170,6 +207,7 @@
                     >
 
                     <div>
+
                         <p class="text-sm font-medium text-gray-800 dark:text-white/90">
                             {{ __('messages.registration_enabled') }}
                         </p>
@@ -177,6 +215,7 @@
                         <p class="text-xs text-gray-500 dark:text-gray-400">
                             {{ __('messages.registration_enabled_description') }}
                         </p>
+
                     </div>
 
                 </label>
@@ -189,9 +228,19 @@
 
                 <button
                     type="submit"
-                    class="rounded-lg bg-brand-500 px-5 py-3
-                           text-sm font-medium text-white
-                           hover:bg-brand-600"
+
+                    class="rounded-lg
+                           bg-[#6B4A2D]
+                           px-5 py-3
+                           text-sm font-medium
+                           text-white
+                           transition
+
+                           hover:bg-[#3E2A1F]
+
+                           dark:bg-[#D0A15D]
+                           dark:text-[#1B1511]
+                           dark:hover:bg-[#D8B77A]"
                 >
                     {{ __('messages.save_changes') }}
                 </button>

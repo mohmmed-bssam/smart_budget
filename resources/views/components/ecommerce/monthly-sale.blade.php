@@ -2,6 +2,7 @@
     'monthlyIncome' => [],
     'monthlyExpenses' => [],
     'year' => null,
+    'baseCurrency' => 'USD',
 ])
 
 <div
@@ -17,6 +18,7 @@
 
             <h3 class="text-lg font-semibold text-[#2B2118] dark:text-[#F7F1E8]">
                 {{ __('messages.income_expenses') }}
+                ({{ $baseCurrency }})
             </h3>
 
             <p class="mt-1 text-sm text-[#8A7A68] dark:text-[#C4B3A1]">
@@ -39,6 +41,8 @@
 
             data-income-label="{{ __('messages.income') }}"
             data-expenses-label="{{ __('messages.expense') }}"
+
+            data-currency="{{ $baseCurrency }}"
 
             class="-ml-5 h-full min-w-[690px] pl-2 xl:min-w-full"
         >

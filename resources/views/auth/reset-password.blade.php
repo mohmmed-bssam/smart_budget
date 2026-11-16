@@ -1,4 +1,5 @@
 <x-guest-layout>
+@section('title', __('messages.reset_password'))
 
     <div
         class="min-h-screen"

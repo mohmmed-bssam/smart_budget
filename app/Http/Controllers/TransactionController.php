@@ -14,16 +14,26 @@ use Illuminate\Support\Facades\DB;
 class TransactionController extends Controller
 {
 
-    public function index()
-    {
-        $transactions = Transaction::where('user_id', auth()->id())
-            ->with(['account', 'category'])
-            ->latest()
-            ->paginate(10);
+ public function index()
+{
+    $itemsPerPage = (int) Setting::where('key', 'items_per_page')
+        ->value('value');
 
+    $itemsPerPage = $itemsPerPage ?: 10;
 
-        return view('transactions.index', compact('transactions'));
-    }
+    $transactions = Transaction::where('user_id', auth()->id())
+        ->with([
+            'account',
+            'category',
+        ])
+        ->latest()
+        ->paginate($itemsPerPage);
+
+    return view(
+        'transactions.index',
+        compact('transactions')
+    );
+}
 
 
 

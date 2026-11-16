@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', __('messages.create_transaction_title'))
 
 @section('content')
     <div class="space-y-6">

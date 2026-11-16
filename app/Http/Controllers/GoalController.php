@@ -4,19 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use App\Models\Goal;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class GoalController extends Controller
 {
-    public function index()
-    {
-        $goals = Goal::with('savings')->where('user_id', Auth::id())
-            ->latest()
-            ->paginate(10);
+ public function index()
+{
+    $itemsPerPage = (int) Setting::where('key', 'items_per_page')
+        ->value('value');
 
-        return view('goals.index', compact('goals'));
-    }
+    $itemsPerPage = $itemsPerPage ?: 10;
+
+    $goals = Goal::with('savings')
+        ->where('user_id', Auth::id())
+        ->latest()
+        ->paginate($itemsPerPage);
+
+    return view('goals.index', compact('goals'));
+}
 
 
     public function create()

@@ -17,9 +17,9 @@
         content="{{ csrf_token() }}"
     >
 
-    <title>
-        {{ config('app.name', 'SmartBudget') }}
-    </title>
+  <title>
+    @yield('title', 'SmartBudget') | SmartBudget
+</title>
 
 
     <!-- Fonts -->

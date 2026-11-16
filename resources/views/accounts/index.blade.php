@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', __('messages.accounts'))
 @section('content')
 
 <div class="space-y-6">
@@ -52,7 +52,7 @@
     </a>
 
 </div>
-        
+
 
     </div>
 

@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', __('messages.edit_budget_title'))
 
 @section('content')
 

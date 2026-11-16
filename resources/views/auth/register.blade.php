@@ -1,4 +1,5 @@
 <x-guest-layout>
+@section('title', __('messages.register'))
 
     <div
         class="min-h-screen"
