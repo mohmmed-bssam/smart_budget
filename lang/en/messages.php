@@ -501,4 +501,29 @@ return [
 
 'no_accounts_for_saving' =>
     'You do not have any accounts available for saving.',
+'account_statement' => 'Account Statement',
+'account_statement_description' => 'Select the period you want to view account activity for.',
+'from_date' => 'From Date',
+'to_date' => 'To Date',
+'generate_statement' => 'Generate Statement',
+'statement_period' =>
+    'Statement Period',
+
+'statement_generated_at' =>
+    'Statement Date',
+
+'total_incoming' =>
+    'Total Incoming',
+
+'total_outgoing' =>
+    'Total Outgoing',
+
+'net_movement' =>
+    'Net Movement',
+
+'movement_type' =>
+    'Movement Type',
+'closing_balance' => 'Closing Balance',
+'no_movements_in_period' =>
+    'There are no account movements during the selected period.',
 ];

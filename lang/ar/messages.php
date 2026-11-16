@@ -500,4 +500,30 @@ return [
 
 'no_accounts_for_saving' =>
     'لا يوجد لديك أي حساب لاستخدامه في الادخار.',
+'account_statement' => 'كشف حساب',
+'account_statement_description' => 'اختر الفترة التي تريد عرض حركات الحساب خلالها.',
+'from_date' => 'من تاريخ',
+'to_date' => 'إلى تاريخ',
+'generate_statement' => 'إنشاء كشف الحساب',
+'statement_period' =>
+    'فترة كشف الحساب',
+
+'statement_generated_at' =>
+    'تاريخ إصدار الكشف',
+
+'total_incoming' =>
+    'إجمالي الداخل',
+
+'total_outgoing' =>
+    'إجمالي الخارج',
+
+'net_movement' =>
+    'صافي الحركة',
+
+'movement_type' =>
+    'نوع الحركة',
+
+'no_movements_in_period' =>
+    'لا توجد حركات مالية خلال الفترة المحددة.',
+'closing_balance' => 'رصيد آخر المدة',
 ];

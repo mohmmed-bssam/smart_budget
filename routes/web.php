@@ -95,7 +95,10 @@ Route::delete(
     '/savings/{saving}',
     [SavingController::class, 'destroy']
 )->name('savings.destroy');
-
+Route::get(
+    '/accounts/{account}/statement',
+    [AccountController::class, 'statement']
+)->name('accounts.statement');
                 /*
                 |--------------------------------------------------------------------------
                 | Profile

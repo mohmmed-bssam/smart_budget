@@ -143,13 +143,48 @@
                     </p>
                 </div>
 
-                <a href="{{ route('transactions.create') }}"
-                    class="inline-flex items-center justify-center rounded-lg
-                       bg-brand-500 px-4 py-2.5 text-sm font-medium
-                       text-white hover:bg-brand-600">
-                    {{ __('messages.add_transaction') }}
-                </a>
+ <div class="flex flex-wrap items-center gap-2">
 
+    <a
+        href="{{ route('transactions.create') }}"
+        class="inline-flex items-center justify-center rounded-xl
+               px-4 py-2.5 text-sm font-medium text-white"
+        style="background: linear-gradient(135deg, #5E4029, #8A6238);"
+    >
+        <i class="fa-solid fa-plus me-2"></i>
+
+        {{ __('messages.add_transaction') }}
+    </a>
+
+
+    <button
+        type="button"
+
+        onclick="
+            const modal = document.getElementById('statementModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        "
+
+        class="inline-flex items-center justify-center rounded-xl
+               border border-[#D8CEC2]
+               px-4 py-2.5
+               text-sm font-medium
+               text-[#6B4A2D]
+               hover:bg-[#F3E8D8]
+
+               dark:border-[#594236]
+               dark:text-[#D8B77A]
+               dark:hover:bg-[#30231B]"
+    >
+
+        <i class="fa-solid fa-file-lines me-2"></i>
+
+        {{ __('messages.account_statement') }}
+
+    </button>
+
+</div>
             </div>
 
 
@@ -495,4 +530,176 @@
             </div>
 
         </div>
+        <div
+    id="statementModal"
+    class="fixed inset-0 z-[9999] hidden
+           items-center justify-center
+           bg-black/40 px-4"
+>
+
+    <div
+        class="w-full max-w-lg rounded-2xl
+               border border-[#E8DDCF]
+               bg-[#FFFDF9]
+               p-6 shadow-xl
+
+               dark:border-[#463429]
+               dark:bg-[#241B16]"
+    >
+
+        <div class="mb-5 flex items-center justify-between">
+
+            <div>
+
+                <h3 class="text-lg font-bold text-[#2B2118] dark:text-[#F7F1E8]">
+                    {{ __('messages.account_statement') }}
+                </h3>
+
+                <p class="mt-1 text-sm text-[#8A7A68] dark:text-[#C4B3A1]">
+                    {{ __('messages.account_statement_description') }}
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                onclick="document.getElementById('statementModal').classList.add('hidden')"
+                class="flex h-9 w-9 items-center justify-center
+                       rounded-lg
+                       text-[#8A7A68]
+                       hover:bg-[#F3E8D8]
+                       dark:text-[#C4B3A1]
+                       dark:hover:bg-[#30231B]"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+        </div>
+
+
+        <form
+            method="GET"
+            action="{{ route('accounts.statement', $account) }}"
+            class="space-y-5"
+        >
+
+            {{-- From Date --}}
+            <div>
+
+                <label
+                    class="mb-2 block text-sm font-medium
+                           text-[#3E342C]
+                           dark:text-[#E7DDD2]"
+                >
+                    {{ __('messages.from_date') }}
+                </label>
+
+                <input
+                    type="date"
+                    name="from"
+                    required
+                    onclick="this.showPicker()"
+
+                    class="h-12 w-full rounded-xl border
+                           border-[#D8CEC2]
+                           bg-[#FFFDF9]
+                           px-4
+                           text-sm text-[#2B2118]
+                           outline-none
+                           focus:border-[#B88945]
+
+                           dark:border-[#594236]
+                           dark:bg-[#2A1F18]
+                           dark:text-[#F7F1E8]"
+                >
+
+            </div>
+
+
+            {{-- To Date --}}
+            <div>
+
+                <label
+                    class="mb-2 block text-sm font-medium
+                           text-[#3E342C]
+                           dark:text-[#E7DDD2]"
+                >
+                    {{ __('messages.to_date') }}
+                </label>
+
+                <input
+                    type="date"
+                    name="to"
+                    required
+                    onclick="this.showPicker()"
+
+                    class="h-12 w-full rounded-xl border
+                           border-[#D8CEC2]
+                           bg-[#FFFDF9]
+                           px-4
+                           text-sm text-[#2B2118]
+                           outline-none
+                           focus:border-[#B88945]
+
+                           dark:border-[#594236]
+                           dark:bg-[#2A1F18]
+                           dark:text-[#F7F1E8]"
+                >
+
+            </div>
+
+
+            <div
+                class="flex justify-end gap-3
+                       border-t border-[#EEE2D5]
+                       pt-5
+                       dark:border-[#463429]"
+            >
+
+                <button
+                    type="button"
+                    onclick="document.getElementById('statementModal').classList.add('hidden')"
+                    class="rounded-xl border
+                           border-[#D8CEC2]
+                           px-4 py-2.5
+                           text-sm font-medium
+                           text-[#6B4A2D]
+
+                           hover:bg-[#F3E8D8]
+
+                           dark:border-[#594236]
+                           dark:text-[#D8B77A]"
+                >
+                    {{ __('messages.cancel') }}
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="rounded-xl
+                           px-4 py-2.5
+                           text-sm font-medium
+                           text-white"
+
+                    style="
+                        background:
+                            linear-gradient(
+                                135deg,
+                                #5E4029,
+                                #8A6238
+                            );
+                    "
+                >
+                    <i class="fa-solid fa-file-lines me-2"></i>
+
+                    {{ __('messages.generate_statement') }}
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
     @endsection
