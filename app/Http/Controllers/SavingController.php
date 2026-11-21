@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
-
+use App\Models\User;
+use App\Notifications\GoalThresholdNotification;
+use App\Notifications\GoalCompletedNotification;
 class SavingController extends Controller
 {
     public function store(
@@ -359,7 +361,12 @@ $remaining = round(
             ]);
         });
 
+$goal->refresh();
 
+$this->checkGoalThreshold(
+    Auth::id(),
+    $goal
+);
         flash()->success(
             __('messages.saving_created')
         );
@@ -706,7 +713,100 @@ public function exchangePreview(
         );
 }
 
+private function checkGoalThreshold(
+    int $userId,
+    Goal $goal
+): void {
+    if ((float) $goal->target_amount <= 0) {
+        return;
+    }
 
+    $savedAmount = (float) $goal
+        ->savings()
+        ->sum('amount');
+
+    $percentage = round(
+        (
+            $savedAmount
+            /
+            (float) $goal->target_amount
+        ) * 100,
+        2
+    );
+
+    $user = User::findOrFail($userId);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Goal Completed
+    |--------------------------------------------------------------------------
+    */
+
+    if ($percentage >= 100) {
+
+        $alreadyCompletedNotified = $user
+            ->notifications()
+            ->where(
+                'data->type',
+                'goal_completed'
+            )
+            ->where(
+                'data->goal_id',
+                $goal->id
+            )
+            ->exists();
+
+
+        if (! $alreadyCompletedNotified) {
+
+            $user->notify(
+                new GoalCompletedNotification(
+                    $goal
+                )
+            );
+        }
+
+        return;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Goal 80% Warning
+    |--------------------------------------------------------------------------
+    */
+
+    if ($percentage < 80) {
+        return;
+    }
+
+
+    $alreadyThresholdNotified = $user
+        ->notifications()
+        ->where(
+            'data->type',
+            'goal_threshold'
+        )
+        ->where(
+            'data->goal_id',
+            $goal->id
+        )
+        ->exists();
+
+
+    if ($alreadyThresholdNotified) {
+        return;
+    }
+
+
+    $user->notify(
+        new GoalThresholdNotification(
+            $goal,
+            $percentage
+        )
+    );
+}
     private function authorizeGoal(
         Goal $goal
     ) {

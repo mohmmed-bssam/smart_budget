@@ -89,9 +89,50 @@ return [
     'no_transactions_found' => 'No transactions found yet',
     'users_management' => 'Users Management',
     'users_management_description' => 'Manage user accounts and permissions',
+// en
 
-    'user' => 'User',
-    'admin' => 'Administrator',
+'notifications' => 'Notifications',
+
+'mark_all_as_read' =>
+    'Mark all as read',
+
+'no_notifications' =>
+    'No notifications',
+'currency_details' => 'Currency Details',
+'base_currency' => 'Base Currency',
+'budget_currency' => 'Budget Currency',
+'no_notifications_description' =>
+    'Your financial alerts will appear here.',
+'budget_threshold_title' =>
+    'Budget Limit Approaching',
+'budget_exceeded_title' =>
+    'Budget Exceeded',
+'goal_threshold_title' =>
+    'You Are Close to Your Goal',
+'goal_completed_title' =>
+    'Goal Achieved!',
+
+'goal_completed_message' =>
+    'You have successfully achieved your financial goal ":goal" with a target of :amount :currency.',
+    'goal_deadline_reminder_title' =>
+    'Goal Deadline Approaching',
+'goal_deadline_passed_title' =>
+    'Goal Deadline Passed',
+'new_user_registered_title' =>
+    'New User Registered',
+
+'new_user_registered_message' =>
+    ':name created a new account using :email.',
+'goal_deadline_passed_message' =>
+    'The deadline for your financial goal ":goal" passed on :date and the goal has not been completed yet.',
+'goal_deadline_reminder_message' =>
+    'Only 3 days remain until the deadline for your financial goal ":goal". Deadline: :date.',
+'goal_threshold_message' =>
+    'You have reached :percentage% of your financial goal ":goal".',
+'budget_exceeded_message' =>
+    'You exceeded your :category budget by :percentage%, exceeding it by :amount :currency.',
+'budget_threshold_message' =>
+    'You have spent :percentage% of your :category budget.',    'admin' => 'Administrator',
     'role' => 'Role',
     'status' => 'Status',
 

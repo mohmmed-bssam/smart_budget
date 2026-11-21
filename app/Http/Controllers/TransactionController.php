@@ -10,6 +10,12 @@ use Illuminate\Validation\Rule;
 use App\Models\Setting;
 use App\Services\CurrencyService;
 use Illuminate\Support\Facades\DB;
+use App\Models\Budget;
+use App\Models\User;
+use App\Notifications\BudgetThresholdNotification;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use App\Notifications\BudgetExceededNotification;
 
 class TransactionController extends Controller
 {
@@ -21,7 +27,7 @@ class TransactionController extends Controller
 
     $itemsPerPage = $itemsPerPage ?: 10;
 
-    $transactions = Transaction::where('user_id', auth()->id())
+    $transactions = Transaction::where('user_id', Auth::id())
         ->with([
             'account',
             'category',
@@ -39,11 +45,11 @@ class TransactionController extends Controller
 
     public function create()
     {
-        $accounts = Account::where('user_id', auth()->id())
+        $accounts = Account::where('user_id', Auth::id())
             ->get();
 
 
-        $categories = Category::where('user_id', auth()->id())
+        $categories = Category::where('user_id', Auth::id())
             ->orWhereNull('user_id')
             ->get();
 
@@ -63,14 +69,14 @@ public function store(
         'account_id' => [
             'required',
             Rule::exists('accounts', 'id')
-                ->where('user_id', auth()->id()),
+                ->where('user_id', Auth::id()),
         ],
 
         'category_id' => [
             'required',
             Rule::exists('categories', 'id')
                 ->where(function ($query) {
-                    $query->where('user_id', auth()->id())
+                    $query->where('user_id', Auth::id())
                         ->orWhereNull('user_id');
                 }),
         ],
@@ -95,7 +101,7 @@ public function store(
     )
         ->where(
             'user_id',
-            auth()->id()
+            Auth::id()
         )
         ->firstOrFail();
 
@@ -107,7 +113,7 @@ public function store(
         ->where(function ($query) {
             $query->where(
                 'user_id',
-                auth()->id()
+                Auth::id()
             )
                 ->orWhereNull(
                     'user_id'
@@ -134,10 +140,6 @@ public function store(
     |--------------------------------------------------------------------------
     | Account Amount
     |--------------------------------------------------------------------------
-    |
-    | amount = المبلغ الذي أدخله المستخدم
-    | account_amount = المبلغ الذي يدخل/يخرج من الحساب
-    |
     */
 
     try {
@@ -183,7 +185,7 @@ public function store(
     */
 
     $baseCurrency =
-        auth()->user()->currency
+        Auth::user()->currency
         ?? Setting::where(
             'key',
             'default_currency'
@@ -248,6 +250,12 @@ public function store(
     }
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Save Transaction
+    |--------------------------------------------------------------------------
+    */
+
     DB::transaction(function () use (
         $validated,
         $account,
@@ -264,7 +272,7 @@ public function store(
             )
                 ->where(
                     'user_id',
-                    auth()->id()
+                    Auth::id()
                 )
                 ->lockForUpdate()
                 ->firstOrFail();
@@ -285,7 +293,7 @@ public function store(
 
         Transaction::create([
             'user_id' =>
-                auth()->id(),
+                Auth::id(),
 
             'account_id' =>
                 $lockedAccount->id,
@@ -296,27 +304,18 @@ public function store(
             'type' =>
                 $validated['type'],
 
-            /*
-             * المبلغ كما أدخله المستخدم
-             */
             'amount' =>
                 $validated['amount'],
 
             'currency' =>
                 $validated['currency'],
 
-            /*
-             * المبلغ الفعلي على الحساب
-             */
             'account_amount' =>
                 $accountAmount,
 
             'account_currency' =>
                 $lockedAccount->currency,
 
-            /*
-             * التقارير
-             */
             'exchange_rate' =>
                 $exchangeRate,
 
@@ -357,6 +356,24 @@ public function store(
     });
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Budget Threshold Notification
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        $validated['type']
+        === 'expense'
+    ) {
+        $this->checkBudgetThreshold(
+            Auth::id(),
+            $validated['category_id'],
+            $validated['transaction_date']
+        );
+    }
+
+
     flash()->success(
         __('messages.transaction_created')
     );
@@ -367,7 +384,6 @@ public function store(
             'transactions.index'
         );
 }
-
 
 
     public function show(Transaction $transaction)
@@ -386,11 +402,11 @@ public function store(
         $this->authorizeTransaction($transaction);
 
 
-        $accounts = Account::where('user_id', auth()->id())
+        $accounts = Account::where('user_id', Auth::id())
             ->get();
 
 
-        $categories = Category::where('user_id', auth()->id())
+        $categories = Category::where('user_id', Auth::id())
             ->orWhereNull('user_id')
             ->get();
 
@@ -425,7 +441,7 @@ public function update(
                 'id'
             )->where(
                 'user_id',
-                auth()->id()
+                Auth::id()
             ),
         ],
 
@@ -440,7 +456,7 @@ public function update(
                 $query
                     ->where(
                         'user_id',
-                        auth()->id()
+                        Auth::id()
                     )
                     ->orWhereNull(
                         'user_id'
@@ -468,6 +484,12 @@ public function update(
     ]);
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Category
+    |--------------------------------------------------------------------------
+    */
+
     $category = Category::where(
         'id',
         $validated['category_id']
@@ -477,7 +499,7 @@ public function update(
             $query
                 ->where(
                     'user_id',
-                    auth()->id()
+                    Auth::id()
                 )
                 ->orWhereNull(
                     'user_id'
@@ -500,13 +522,19 @@ public function update(
     }
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | New Account
+    |--------------------------------------------------------------------------
+    */
+
     $newAccount = Account::where(
         'id',
         $validated['account_id']
     )
         ->where(
             'user_id',
-            auth()->id()
+            Auth::id()
         )
         ->firstOrFail();
 
@@ -560,7 +588,7 @@ public function update(
     */
 
     $baseCurrency =
-        auth()->user()->currency
+        Auth::user()->currency
         ?? Setting::where(
             'key',
             'default_currency'
@@ -625,6 +653,12 @@ public function update(
     }
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Update Transaction
+    |--------------------------------------------------------------------------
+    */
+
     DB::transaction(function () use (
         $transaction,
         $validated,
@@ -648,7 +682,7 @@ public function update(
             )
                 ->where(
                     'user_id',
-                    auth()->id()
+                    Auth::id()
                 )
                 ->lockForUpdate()
                 ->firstOrFail();
@@ -657,6 +691,7 @@ public function update(
         /*
          * العمليات القديمة ممكن account_amount يكون NULL.
          */
+
         $oldAccountAmount =
             $transaction->account_amount
             ?? $transaction->amount;
@@ -709,7 +744,7 @@ public function update(
                 )
                     ->where(
                         'user_id',
-                        auth()->id()
+                        Auth::id()
                     )
                     ->lockForUpdate()
                     ->firstOrFail();
@@ -752,27 +787,18 @@ public function update(
             'type' =>
                 $validated['type'],
 
-            /*
-             * العملية الأصلية
-             */
             'amount' =>
                 $validated['amount'],
 
             'currency' =>
                 $validated['currency'],
 
-            /*
-             * ما تأثر به الحساب
-             */
             'account_amount' =>
                 $accountAmount,
 
             'account_currency' =>
                 $lockedNewAccount->currency,
 
-            /*
-             * التقارير
-             */
             'exchange_rate' =>
                 $exchangeRate,
 
@@ -819,6 +845,30 @@ public function update(
     });
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Budget Threshold Notification
+    |--------------------------------------------------------------------------
+    |
+    | نفحص بعد حفظ التعديل.
+    |
+    | لو العملية بعد التعديل أصبحت مصروف،
+    | نفحص ميزانية التصنيف والشهر الجديدين.
+    |
+    */
+
+    if (
+        $validated['type']
+        === 'expense'
+    ) {
+        $this->checkBudgetThreshold(
+            Auth::id(),
+            $validated['category_id'],
+            $validated['transaction_date']
+        );
+    }
+
+
     flash()->info(
         __('messages.transaction_updated')
     );
@@ -850,7 +900,7 @@ public function update(
             )
                 ->where(
                     'user_id',
-                    auth()->id()
+                    Auth::id()
                 )
                 ->lockForUpdate()
                 ->firstOrFail();
@@ -920,7 +970,7 @@ public function exchangePreview(
                 'id'
             )->where(
                 'user_id',
-                auth()->id()
+                Auth::id()
             ),
         ],
     ]);
@@ -932,7 +982,7 @@ public function exchangePreview(
     )
         ->where(
             'user_id',
-            auth()->id()
+            Auth::id()
         )
         ->firstOrFail();
 
@@ -1043,9 +1093,125 @@ public function exchangePreview(
         ], 503);
     }
 }
+private function checkBudgetThreshold(
+    int $userId,
+    int $categoryId,
+    string $transactionDate
+): void {
+    $date = Carbon::parse($transactionDate);
+
+    $budget = Budget::with('category')
+        ->where('user_id', $userId)
+        ->where('category_id', $categoryId)
+        ->where('year', $date->year)
+        ->where('month', $date->month)
+        ->first();
+
+    if (! $budget) {
+        return;
+    }
+
+    if ((float) $budget->base_amount <= 0) {
+        return;
+    }
+
+    $spent = Transaction::where('user_id', $userId)
+        ->where('category_id', $categoryId)
+        ->where('type', 'expense')
+        ->whereYear('transaction_date', $date->year)
+        ->whereMonth('transaction_date', $date->month)
+        ->sum('base_amount');
+
+    $percentage = round(
+        ((float) $spent / (float) $budget->base_amount) * 100,
+        2
+    );
+
+    $user = User::findOrFail($userId);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Budget Exceeded
+    |--------------------------------------------------------------------------
+    */
+
+    if ($percentage >= 100) {
+
+        $alreadyExceededNotified = $user
+            ->notifications()
+            ->where(
+                'data->type',
+                'budget_exceeded'
+            )
+            ->where(
+                'data->budget_id',
+                $budget->id
+            )
+            ->exists();
+
+
+        if (! $alreadyExceededNotified) {
+
+            $exceededAmount = round(
+                (float) $spent
+                -
+                (float) $budget->base_amount,
+                2
+            );
+
+            $user->notify(
+                new BudgetExceededNotification(
+                    $budget,
+                    $percentage,
+                    $exceededAmount
+                )
+            );
+        }
+
+        return;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Budget 80% Warning
+    |--------------------------------------------------------------------------
+    */
+
+    if ($percentage < 80) {
+        return;
+    }
+
+
+    $alreadyThresholdNotified = $user
+        ->notifications()
+        ->where(
+            'data->type',
+            'budget_threshold'
+        )
+        ->where(
+            'data->budget_id',
+            $budget->id
+        )
+        ->exists();
+
+
+    if ($alreadyThresholdNotified) {
+        return;
+    }
+
+
+    $user->notify(
+        new BudgetThresholdNotification(
+            $budget,
+            $percentage
+        )
+    );
+}
     private function authorizeTransaction(Transaction $transaction)
     {
-        if ($transaction->user_id !== auth()->id()) {
+        if ($transaction->user_id !== Auth::id()) {
             abort(403);
         }
     }

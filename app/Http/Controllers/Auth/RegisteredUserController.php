@@ -13,44 +13,43 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use App\Notifications\NewUserRegisteredNotification;
+use Illuminate\Support\Facades\Notification;
 
-class RegisteredUserController extends Controller
-{
+class RegisteredUserController extends Controller {
     /**
-     * Check if registration is enabled.
-     */
-    private function registrationEnabled(): bool
-    {
-        return Setting::where('key', 'registration_enabled')
-            ->value('value') !== '0';
+    * Check if registration is enabled.
+    */
+
+    private function registrationEnabled(): bool {
+        return Setting::where( 'key', 'registration_enabled' )
+        ->value( 'value' ) !== '0';
     }
 
-
     /**
-     * Display the registration view.
-     */
-    public function create(): View|RedirectResponse
-    {
-        if (! $this->registrationEnabled()) {
+    * Display the registration view.
+    */
+
+    public function create(): View|RedirectResponse {
+        if ( ! $this->registrationEnabled() ) {
 
             flash()->warning(
-                __('messages.registration_disabled')
+                __( 'messages.registration_disabled' )
             );
 
-            return redirect()->route('login');
+            return redirect()->route( 'login' );
         }
 
-        return view('auth.register');
+        return view( 'auth.register' );
     }
 
-
     /**
-     * Handle an incoming registration request.
-     *
-     * @throws ValidationException
-     */
-    public function store(Request $request): RedirectResponse
-    {
+    * Handle an incoming registration request.
+    *
+    * @throws ValidationException
+    */
+
+    public function store( Request $request ): RedirectResponse {
         /*
         |--------------------------------------------------------------------------
         | Registration Check
@@ -62,15 +61,14 @@ class RegisteredUserController extends Controller
         |
         */
 
-        if (! $this->registrationEnabled()) {
+        if ( ! $this->registrationEnabled() ) {
 
             flash()->warning(
-                __('messages.registration_disabled')
+                __( 'messages.registration_disabled' )
             );
 
-            return redirect()->route('login');
+            return redirect()->route( 'login' );
         }
-
 
         /*
         |--------------------------------------------------------------------------
@@ -78,7 +76,7 @@ class RegisteredUserController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $request->validate([
+        $request->validate( [
             'name' => [
                 'required',
                 'string',
@@ -99,8 +97,7 @@ class RegisteredUserController extends Controller
                 'confirmed',
                 Rules\Password::defaults(),
             ],
-        ]);
-
+        ] );
 
         /*
         |--------------------------------------------------------------------------
@@ -108,23 +105,31 @@ class RegisteredUserController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $user = User::create([
+        $user = User::create( [
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make(
                 $request->password
             ),
-        ]);
+        ] );
+        $admins = User::where(
+            'role',
+            'admin'
+        )->get();
 
+        Notification::send(
+            $admins,
+            new NewUserRegisteredNotification(
+                $user
+            )
+        );
 
-        event(new Registered($user));
+        event( new Registered( $user ) );
 
-
-        Auth::login($user);
-
+        Auth::login( $user );
 
         return redirect(
-            route('dashboard', absolute: false)
+            route( 'dashboard', absolute: false )
         );
     }
 }

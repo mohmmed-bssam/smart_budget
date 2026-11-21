@@ -10,6 +10,7 @@ use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController as ControllersDashboardController;
 use App\Http\Controllers\GoalController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TransferController;
@@ -99,6 +100,16 @@ Route::get(
     '/accounts/{account}/statement',
     [AccountController::class, 'statement']
 )->name('accounts.statement');
+Route::post(
+    '/notifications/{notification}/read',
+    [NotificationController::class, 'read']
+)->name('notifications.read');
+
+
+Route::post(
+    '/notifications/read-all',
+    [NotificationController::class, 'markAllAsRead']
+)->name('notifications.read-all');
                 /*
                 |--------------------------------------------------------------------------
                 | Profile

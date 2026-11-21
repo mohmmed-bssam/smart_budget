@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +14,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->get();
+           $itemsPerPage = (int) Setting::where('key', 'items_per_page')
+        ->value('value');
+
+    $itemsPerPage = $itemsPerPage ?: 10;
+        $users = User::latest()->paginate($itemsPerPage);
 
         return view('admin.users.index', compact('users'));
     }

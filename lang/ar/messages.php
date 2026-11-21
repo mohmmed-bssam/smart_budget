@@ -20,10 +20,24 @@ return [
 'edit_transaction_title' => 'تعديل العملية المالية',
 'transaction_details' => 'تفاصيل العملية المالية',
 
+'notifications' => 'الإشعارات',
+
+'mark_all_as_read' =>
+    'تحديد الكل كمقروء',
+
+'no_notifications' =>
+    'لا توجد إشعارات',
+
+'no_notifications_description' =>
+    'ستظهر تنبيهاتك المالية هنا عند وجودها.',
 'create_budget_title' => 'إضافة ميزانية',
 'edit_budget_title' => 'تعديل الميزانية',
 'budget_details' => 'تفاصيل الميزانية',
+'budget_threshold_title' =>
+    'اقتربت من حد الميزانية',
 
+'budget_threshold_message' =>
+    'لقد أنفقت :percentage% من ميزانية :category.',
 'create_goal_title' => 'إضافة هدف مالي',
 'edit_goal_title' => 'تعديل الهدف المالي',
 'goal_details' => 'تفاصيل الهدف المالي',
@@ -298,7 +312,6 @@ return [
     'system_category' => 'تصنيف عام',
     'personal_category' => 'تصنيف شخصي',
 
-    'category_details' => 'تفاصيل التصنيف',
     'category_scope' => 'نوع التصنيف',
     'back_to_categories' => 'العودة إلى التصنيفات',
 
@@ -327,7 +340,6 @@ return [
     'save_transaction' => 'حفظ العملية',
     'edit_transaction' => 'تعديل العملية',
 
-    'transaction_details' => 'تفاصيل العملية المالية',
     'back_to_transactions' => 'العودة إلى العمليات المالية',
 
     'no_description' => 'لا يوجد وصف',
@@ -355,7 +367,6 @@ return [
     'name' => 'الاسم الكامل',
     'name_placeholder' => 'أدخل اسمك الكامل',
 
-    'confirm_password' => 'تأكيد كلمة المرور',
     'confirm_password_placeholder' => 'أعد إدخال كلمة المرور',
 
     'already_have_account' => 'لديك حساب بالفعل؟',
@@ -371,14 +382,42 @@ return [
     'reset_password_title' => 'إعادة تعيين كلمة المرور',
     'reset_password_description' => 'أدخل كلمة مرور جديدة لحسابك.',
     'reset_password_side_text' => 'أنشئ كلمة مرور جديدة وآمنة للعودة إلى حسابك وإدارة أموالك.',
-    'reset_password' => 'إعادة تعيين كلمة المرور',
     'verify_email_title' => 'تحقق من بريدك الإلكتروني',
     'verify_email_description' => 'أرسلنا لك رابط تحقق على بريدك الإلكتروني. اضغط على الرابط لتفعيل حسابك والبدء باستخدام SmartBudget.',
     'verify_email_side_text' => 'نحتاج فقط لتأكيد بريدك الإلكتروني قبل أن تبدأ بإدارة حساباتك وأموالك.',
     'verification_link_sent' => 'تم إرسال رابط تحقق جديد إلى بريدك الإلكتروني.',
     'resend_verification_email' => 'إعادة إرسال رابط التحقق',
     'account_inactive' => 'حسابك غير نشط حالياً. يرجى التواصل مع الإدارة.',
-    // ar
+'currency_details' => 'تفاصيل العملة',
+'base_currency' => 'العملة الأساسية',
+'budget_currency' => 'عملة الميزانية',
+'budget_exceeded_title' =>
+    'تم تجاوز الميزانية',
+
+'budget_exceeded_message' =>
+    'تجاوزت ميزانية :category بنسبة :percentage% وبمقدار :amount :currency.',
+'goal_threshold_title' =>
+    'اقتربت من تحقيق هدفك',
+'goal_completed_title' =>
+    'أحسنت! تم تحقيق هدفك',
+
+'goal_completed_message' =>
+    'تم الوصول إلى هدفك المالي ":goal" بقيمة :amount :currency.',
+    'goal_deadline_reminder_title' =>
+    'موعد هدفك اقترب',
+'goal_deadline_passed_title' =>
+    'انتهى موعد الهدف',
+'new_user_registered_title' =>
+    'مستخدم جديد',
+
+'new_user_registered_message' =>
+    'قام :name بإنشاء حساب جديد باستخدام البريد :email.',
+'goal_deadline_passed_message' =>
+    'انتهى الموعد النهائي للهدف المالي ":goal" بتاريخ :date ولم يتم تحقيقه بعد.',
+'goal_deadline_reminder_message' =>
+    'باقي 3 أيام على موعد الهدف المالي ":goal". الموعد النهائي: :date.',
+'goal_threshold_message' =>
+    'وصلت إلى :percentage% من هدفك المالي ":goal".',
     'budget_expense_category_only' => 'يمكن إنشاء الميزانية لتصنيفات المصروفات فقط.',
     'budget_already_exists' => 'توجد ميزانية بالفعل لهذا التصنيف في نفس الشهر والسنة.',
     'budgets_description' => 'حدد ميزانياتك الشهرية وتابع مصروفاتك',
